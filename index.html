@@ -40,7 +40,6 @@
             flex-direction: column;
         }
 
-        /* Windows 11 Titelbalk */
         .win-titlebar {
             background: #ffffff;
             border-bottom: 1px solid var(--win-border-light);
@@ -78,16 +77,9 @@
             color: var(--win-text);
         }
 
-        .win-control-btn:hover {
-            background: rgba(0, 0, 0, 0.06);
-        }
+        .win-control-btn:hover { background: rgba(0, 0, 0, 0.06); }
+        .win-control-btn.close:hover { background: #e81123; color: white; }
 
-        .win-control-btn.close:hover {
-            background: #e81123;
-            color: white;
-        }
-
-        /* Windows 11 Navigatie Tabs */
         .win-tabs {
             display: flex;
             background: #f3f3f3;
@@ -109,17 +101,8 @@
             position: relative;
         }
 
-        .win-tab:hover {
-            background: rgba(0, 0, 0, 0.04);
-            color: var(--win-text);
-        }
-
-        .win-tab.active {
-            background: var(--win-window-bg);
-            color: var(--win-text);
-            font-weight: 600;
-        }
-
+        .win-tab:hover { background: rgba(0, 0, 0, 0.04); color: var(--win-text); }
+        .win-tab.active { background: var(--win-window-bg); color: var(--win-text); font-weight: 600; }
         .win-tab.active::after {
             content: '';
             position: absolute;
@@ -138,15 +121,9 @@
             background: var(--win-window-bg);
         }
 
-        .tab-content {
-            display: none;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Windows 11 Groepen / Kaarten */
         .win-groupbox {
             border: 1px solid var(--win-border-light);
             border-radius: 6px;
@@ -172,9 +149,7 @@
             gap: 14px;
         }
 
-        .form-group {
-            margin-bottom: 4px;
-        }
+        .form-group { margin-bottom: 4px; }
 
         label {
             display: block;
@@ -193,7 +168,6 @@
             font-family: inherit;
             font-size: 13px;
             background: #ffffff;
-            transition: border-color 0.15s, box-shadow 0.15s;
         }
 
         input:focus, select:focus, textarea:focus {
@@ -223,13 +197,8 @@
             gap: 4px;
         }
 
-        .checkbox-group input {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--win-blue);
-        }
+        .checkbox-group input { width: 16px; height: 16px; accent-color: var(--win-blue); }
 
-        /* Windows 11 Knoppen */
         .win-btn {
             padding: 8px 16px;
             font-size: 13px;
@@ -239,63 +208,18 @@
             border-radius: 4px;
             background: #fcfcfc;
             color: var(--win-text);
-            transition: background 0.1s, border-color 0.1s;
         }
 
-        .win-btn:hover {
-            background: #f2f2f2;
-            border-color: #707070;
-        }
+        .win-btn:hover { background: #f2f2f2; border-color: #707070; }
+        .win-btn-primary { background: var(--win-blue); color: white; border-color: var(--win-blue-hover); }
+        .win-btn-primary:hover { background: var(--win-blue-hover); color: white; }
+        .win-btn-danger { background: #fdf3f4; color: #d13438; border-color: #f17075; }
+        .win-btn-danger:hover { background: #d13438; color: white; }
+        .win-btn-warning { background: #fff8ec; color: #bc4b00; border-color: #fce1c0; }
+        .win-btn-warning:hover { background: #ca5010; color: white; }
+        .win-btn-pdf { background: #eef6f0; color: #107c41; border-color: #b3e0c0; }
+        .win-btn-pdf:hover { background: #107c41; color: white; }
 
-        .win-btn:active {
-            background: #e6e6e6;
-        }
-
-        .win-btn-primary {
-            background: var(--win-blue);
-            color: white;
-            border-color: var(--win-blue-hover);
-        }
-
-        .win-btn-primary:hover {
-            background: var(--win-blue-hover);
-            color: white;
-        }
-
-        .win-btn-danger {
-            background: #fdf3f4;
-            color: #d13438;
-            border-color: #f17075;
-        }
-
-        .win-btn-danger:hover {
-            background: #d13438;
-            color: white;
-        }
-
-        .win-btn-warning {
-            background: #fff8ec;
-            color: #bc4b00;
-            border-color: #fce1c0;
-        }
-
-        .win-btn-warning:hover {
-            background: #ca5010;
-            color: white;
-        }
-
-        .win-btn-pdf {
-            background: #eef6f0;
-            color: #107c41;
-            border-color: #b3e0c0;
-        }
-
-        .win-btn-pdf:hover {
-            background: #107c41;
-            color: white;
-        }
-
-        /* Tabel Styling in Win11 Stijl */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -307,51 +231,25 @@
             overflow: hidden;
         }
 
-        th, td {
-            border-bottom: 1px solid var(--win-border-light);
-            padding: 10px 12px;
-            text-align: left;
-        }
+        th, td { border-bottom: 1px solid var(--win-border-light); padding: 10px 12px; text-align: left; }
+        th { background-color: #f3f3f3; font-weight: 600; color: var(--win-text); }
+        tr:hover { background-color: rgba(0, 0, 0, 0.02); }
 
-        th {
-            background-color: #f3f3f3;
-            font-weight: 600;
-            color: var(--win-text);
-        }
-
-        tr:hover {
-            background-color: rgba(0, 0, 0, 0.02);
-        }
-
-        /* Kleurcodering UF */
         .uf-groen { background-color: #d4edda !important; color: #155724; font-weight: bold; }
         .uf-oranje { background-color: #fff3cd !important; color: #856404; font-weight: bold; }
         .uf-rood { background-color: #f8d7da !important; color: #721c24; font-weight: bold; }
 
-        .status-bar {
-            margin-top: 12px;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .verpleging-box {
-            background: #ffffff;
-            border: 1px solid var(--win-border);
-            border-radius: 4px;
-            padding: 8px;
-            max-height: 120px;
-            overflow-y: auto;
-        }
+        .status-bar { margin-top: 12px; font-weight: 600; font-size: 13px; }
+        .verpleging-box { background: #ffffff; border: 1px solid var(--win-border); border-radius: 4px; padding: 8px; max-height: 120px; overflow-y: auto; }
     </style>
 </head>
 <body>
 
     <div class="win-window">
-        <!-- Windows 11 Titelbalk -->
         <div class="win-titlebar">
             <div class="win-titlebar-left">
                 <span>🏥</span>
-                <span>Dialyse Beheersysteem - Windows 11 Edition</span>
+                <span>Dialyse Beheersysteem - Windows 11 Planning Edition</span>
             </div>
             <div class="win-titlebar-buttons">
                 <button class="win-control-btn" title="Minimaliseren">🗕</button>
@@ -360,16 +258,15 @@
             </div>
         </div>
 
-        <!-- Windows 11 Navigatie Tabs -->
         <div class="win-tabs">
             <button class="win-tab active" onclick="schakelTab('invoer', this)">Invoer & Sessie</button>
-            <button class="win-tab" onclick="schakelTab('planning', this)">📅 Planning</button>
+            <button class="win-tab" onclick="schakelTab('planning', this)">📅 Planning Generator</button>
             <button class="win-tab" onclick="schakelTab('overzicht', this)">Overzicht & Rapportage</button>
         </div>
 
         <div class="win-content">
 
-            <!-- TAB 1: INVOER -->
+            <!-- TAB 1: INVOER & SESSIE -->
             <div id="tab-invoer" class="tab-content active">
                 <div class="win-groupbox">
                     <div class="win-groupbox-title" id="formTitle">Nieuwe Dialyse Sessie Toevoegen</div>
@@ -460,24 +357,17 @@
                                 </div>
                             </div>
 
-                            <!-- Medicatie vinkjes -->
                             <div class="form-group">
                                 <label>Epo:</label>
-                                <div class="checkbox-group">
-                                    <label><input type="checkbox" id="Epo" value="Ja"> Toegediend (Ja)</label>
-                                </div>
+                                <div class="checkbox-group"><label><input type="checkbox" id="Epo" value="Ja"> Toegediend (Ja)</label></div>
                             </div>
                             <div class="form-group">
                                 <label>Ijzer:</label>
-                                <div class="checkbox-group">
-                                    <label><input type="checkbox" id="Ijzer" value="Ja"> Toegediend (Ja)</label>
-                                </div>
+                                <div class="checkbox-group"><label><input type="checkbox" id="Ijzer" value="Ja"> Toegediend (Ja)</label></div>
                             </div>
                             <div class="form-group">
                                 <label>Shuntflow:</label>
-                                <div class="checkbox-group">
-                                    <label><input type="checkbox" id="Shuntflow" value="Ja"> Actief / Aanwezig (Ja)</label>
-                                </div>
+                                <div class="checkbox-group"><label><input type="checkbox" id="Shuntflow" value="Ja"> Actief / Aanwezig (Ja)</label></div>
                             </div>
 
                             <div class="form-group">
@@ -485,7 +375,6 @@
                                 <input type="number" id="Resultaat shuntflow" max="9999" placeholder="Bijv. 1200">
                             </div>
 
-                            <!-- Verpleging -->
                             <div class="form-group" style="grid-column: span 2;">
                                 <label>Verpleging (Gelezen & gesynchroniseerd via Config-tabblad):</label>
                                 <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
@@ -493,9 +382,7 @@
                                     <button type="button" class="win-btn" onclick="voegVerplegerToe()">+ Toevoegen aan Config</button>
                                     <button type="button" class="win-btn win-btn-danger" onclick="verwijderVerplegerUitLijst()">- Verwijder geselecteerde</button>
                                 </div>
-                                <div id="verplegingContainer" class="verpleging-box">
-                                    Laden...
-                                </div>
+                                <div id="verplegingContainer" class="verpleging-box">Laden...</div>
                             </div>
 
                             <div class="form-group">
@@ -516,27 +403,46 @@
                 </div>
             </div>
 
-            <!-- TAB 2: PLANNING -->
+            <!-- TAB 2: PLANNING GENERATOR -->
             <div id="tab-planning" class="tab-content">
                 <div class="win-groupbox">
-                    <div class="win-groupbox-title">📅 Actieve Dialyse Planning & Schema's</div>
-                    <p style="font-size: 13px; color: var(--win-text-secondary);">Hieronder zie je een overzicht van de geplande dialyseschema's per sessie:</p>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Dag / Nacht</th>
-                                    <th>Planning Schema</th>
-                                    <th>Aansluitdatum</th>
-                                    <th>Actie</th>
-                                </tr>
-                            </thead>
-                            <tbody id="planningTabelBody">
-                                <tr><td colspan="5">Gegevens laden...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <div class="win-groupbox-title">📅 Planning Generator (Herhalende afspraken uitschrijven)</div>
+                    <form id="planningForm" onsubmit="genereerPlanning(event)">
+                        <div class="grid">
+                            <div class="form-group">
+                                <label>Basis ID (Prefix):</label>
+                                <input type="text" id="planID" placeholder="Bijv. PLAN-01" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Dag / Nacht:</label>
+                                <select id="planDagNacht">
+                                    <option value="Dag">Dag</option>
+                                    <option value="Nacht">Nacht</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Start Aansluitdatum & Tijd:</label>
+                                <input type="datetime-local" id="planStartDatum" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Schema Herhaling:</label>
+                                <select id="planSchema" required>
+                                    <option value="Elke dag">Elke dag</option>
+                                    <option value="Om de dag">Om de dag</option>
+                                    <option value="ma wo vrij">ma wo vrij</option>
+                                    <option value="di do za">di do za</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Einddatum van herhaling:</label>
+                                <input type="date" id="planEindDatum" required>
+                            </div>
+                        </div>
+                        <div style="margin-top: 18px;">
+                            <button type="submit" class="win-btn win-btn-primary">Alle afspraken uitschrijven naar Overzicht</button>
+                        </div>
+                    </form>
+                    <div id="planStatus" class="status-bar"></div>
                 </div>
             </div>
 
@@ -576,17 +482,13 @@
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyZFvXqmAU3Dt7ttvk5HmYb8HZHz5JFLUV9tLbT5LLeV4VJcJYhBFAg1Tj3Um43qHOv/exec';
-        
         let verplegersLijst = [];
 
-        window.onload = function() {
-            laadData();
-        };
+        window.onload = function() { laadData(); };
 
         function schakelTab(tabNaam, btnEl) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.win-tab').forEach(el => el.classList.remove('active'));
-            
             document.getElementById('tab-' + tabNaam).classList.add('active');
             btnEl.classList.add('active');
         }
@@ -613,59 +515,36 @@
             let naam = input.value.trim();
             if (naam && !verplegersLijst.includes(naam)) {
                 fetch(scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors',
+                    method: 'POST', mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ action: 'add_verpleger', naam: naam })
-                }).then(() => {
-                    input.value = '';
-                    setTimeout(laadData, 1000);
-                });
+                }).then(() => { input.value = ''; setTimeout(laadData, 1000); });
             }
         }
 
         function verwijderVerplegerUitLijst() {
             let teVerwijderen = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value);
-            if (teVerwijderen.length === 0) {
-                alert('Vink eerst de naam/namen aan in de lijst die je wilt verwijderen uit de Config.');
-                return;
-            }
-            if (confirm(`Weet je zeker dat je "${teVerwijderen.join(', ')}" wilt verwijderen uit de Config?`)) {
-                let promises = teVerwijderen.map(naam => {
-                    return fetch(scriptURL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify({ action: 'delete_verpleger', naam: naam })
-                    });
-                });
-
-                Promise.all(promises).then(() => {
-                    setTimeout(laadData, 1000);
-                });
+            if (teVerwijderen.length === 0) { alert('Vink eerst de naam aan in de lijst.'); return; }
+            if (confirm(`Weet je zeker dat je "${teVerwijderen.join(', ')}" wilt verwijderen?`)) {
+                let promises = teVerwijderen.map(naam => fetch(scriptURL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'delete_verpleger', naam: naam })
+                }));
+                Promise.all(promises).then(() => { setTimeout(laadData, 1000); });
             }
         }
 
         function berekenTotaalTijd() {
             let aansluit = document.getElementById('Aansluitdatumtijd').value;
             let afsluit = document.getElementById('Afsluitdatumtijd').value;
-            
             if (aansluit && afsluit) {
-                let start = new Date(aansluit);
-                let eind = new Date(afsluit);
-                let diffMs = eind - start;
-                
+                let diffMs = new Date(afsluit) - new Date(aansluit);
                 if (diffMs > 0) {
                     let diffMins = Math.floor(diffMs / 60000);
-                    let uren = Math.floor(diffMins / 60);
-                    let minuten = diffMins % 60;
-                    document.getElementById('Totaaltijd').value = `${uren}u ${minuten}m`;
-                } else {
-                    document.getElementById('Totaaltijd').value = 'Ongeldige tijd';
-                }
-            } else {
-                document.getElementById('Totaaltijd').value = '';
-            }
+                    document.getElementById('Totaaltijd').value = `${Math.floor(diffMins / 60)}u ${diffMins % 60}m`;
+                } else { document.getElementById('Totaaltijd').value = 'Ongeldige tijd'; }
+            } else { document.getElementById('Totaaltijd').value = ''; }
         }
 
         function berekenGegevens() {
@@ -677,7 +556,6 @@
                 let advies = (pre - droog + 0.3).toFixed(2);
                 let ufField = document.getElementById('UF advies');
                 ufField.value = advies;
-                
                 ufField.className = '';
                 let val = parseFloat(advies);
                 if (val >= 4.5) ufField.classList.add('uf-rood');
@@ -689,11 +567,80 @@
             }
 
             if (!isNaN(pre) && !isNaN(post)) {
-                let werkUf = (post - pre).toFixed(2);
-                document.getElementById('Werkelijke uf').value = werkUf;
-            } else {
-                document.getElementById('Werkelijke uf').value = '';
+                document.getElementById('Werkelijke uf').value = (post - pre).toFixed(2);
+            } else { document.getElementById('Werkelijke uf').value = ''; }
+        }
+
+        // Automatisch afspraken genereren vanuit Planning tab
+        function genereerPlanning(e) {
+            e.preventDefault();
+            const status = document.getElementById('planStatus');
+            status.style.color = 'black';
+            status.textContent = 'Bezig met genereren en uitschrijven...';
+
+            let baseId = document.getElementById('planID').value.trim();
+            let dagNacht = document.getElementById('planDagNacht').value;
+            let startVal = document.getElementById('planStartDatum').value;
+            let schema = document.getElementById('planSchema').value;
+            let eindDateStr = document.getElementById('planEindDatum').value;
+
+            let startDate = new Date(startVal);
+            let endDate = new Date(eindDateStr + 'T23:59:59');
+            let rowsToInsert = [];
+            let currDate = new Date(startDate);
+            let counter = 1;
+
+            while (currDate <= endDate) {
+                let dayOfWeek = currDate.getDay(); // 0=Zo, 1=Ma, 2=Di, 3=Wo, 4=Do, 5=Vrij, 6=Za
+                let magInplanning = false;
+
+                if (schema === 'Elke dag') {
+                    magInplanning = true;
+                } else if (schema === 'Om de dag') {
+                    let diffDays = Math.round((currDate - startDate) / (1000 * 60 * 60 * 24));
+                    if (diffDays % 2 === 0) magInplanning = true;
+                } else if (schema === 'ma wo vrij') {
+                    if (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) magInplanning = true;
+                } else if (schema === 'di do za') {
+                    if (dayOfWeek === 2 || dayOfWeek === 4 || dayOfWeek === 6) magInplanning = true;
+                }
+
+                if (magInplanning) {
+                    let dateStr = currDate.toISOString().slice(0, 10);
+                    let timeStr = startVal.slice(11, 16);
+                    let aansluitVal = `${dateStr}T${timeStr}`;
+
+                    rowsToInsert.push({
+                        "ID": `${baseId}-${counter}`,
+                        "Dag/Nacht": dagNacht,
+                        "Planning": schema,
+                        "Aansluitdatumtijd": aansluitVal,
+                        "Droog gewicht": "109.0"
+                    });
+                    counter++;
+                }
+                currDate.setDate(currDate.getDate() + 1);
             }
+
+            if (rowsToInsert.length === 0) {
+                status.style.color = 'red';
+                status.textContent = 'Geen afspraken gevonden binnen deze periode voor dit schema.';
+                return;
+            }
+
+            fetch(scriptURL, {
+                method: 'POST', mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'bulk_insert', rows: rowsToInsert })
+            }).then(() => {
+                status.style.color = '#107c41';
+                status.textContent = `Succeselijk ${rowsToInsert.length} afspraken uitgeschreven naar het Overzicht!`;
+                setTimeout(() => {
+                    status.textContent = '';
+                    schakelTab('overzicht', document.querySelectorAll('.win-tab')[2]);
+                    laadData();
+                }, 1500);
+            });
         }
 
         function laadData() {
@@ -707,20 +654,15 @@
                     }
 
                     const tbody = document.getElementById('tabelBody');
-                    const planningTbody = document.getElementById('planningTabelBody');
                     tbody.innerHTML = '';
-                    planningTbody.innerHTML = '';
-                    
                     let data = response.dialyse || [];
 
                     if (!Array.isArray(data) || data.length === 0) {
                         tbody.innerHTML = '<tr><td colspan="12">Geen records gevonden.</td></tr>';
-                        planningTbody.innerHTML = '<tr><td colspan="5">Geen planning gevonden.</td></tr>';
                         return;
                     }
 
                     data.slice().reverse().forEach(item => {
-                        // Overzicht tabel rij
                         let tr = document.createElement('tr');
                         let ufVal = parseFloat(item['UF advies']) || 0;
                         let ufKleurClass = '';
@@ -747,24 +689,7 @@
                             </td>
                         `;
                         tbody.appendChild(tr);
-
-                        // Planning tab tabel rij
-                        let ptr = document.createElement('tr');
-                        ptr.innerHTML = `
-                            <td>${item['ID'] || ''}</td>
-                            <td>${item['Dag/Nacht'] || ''}</td>
-                            <td><span style="background: #eef6f0; color: #107c41; padding: 3px 8px; border-radius: 4px; font-weight: 600;">${item['Planning'] || 'Geen'}</span></td>
-                            <td>${item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : '-'}</td>
-                            <td>
-                                <button class="win-btn win-btn-warning" style="padding:2px 6px; font-size:11px;" onclick='bewerkItem(${JSON.stringify(item)})'>Bewerken</button>
-                            </td>
-                        `;
-                        planningTbody.appendChild(ptr);
                     });
-                })
-                .catch(err => {
-                    console.error('Fout bij laden:', err);
-                    document.getElementById('tabelBody').innerHTML = '<tr><td colspan="12">Fout bij laden van gegevens.</td></tr>';
                 });
         }
 
@@ -811,24 +736,14 @@
             };
 
             fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
+                method: 'POST', mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(payload)
-            })
-            .then(() => {
+            }).then(() => {
                 status.style.color = '#107c41';
-                status.textContent = 'Gegevens succesvol opgeslagen in de Google Sheet!';
+                status.textContent = 'Gegevens succesvol opgeslagen!';
                 resetForm();
-                setTimeout(() => { 
-                    status.textContent = ''; 
-                    laadData(); 
-                }, 1500);
-            })
-            .catch(err => {
-                console.error('Fout bij verzenden:', err);
-                status.style.color = '#d13438';
-                status.textContent = 'Fout bij opslaan: ' + err;
+                setTimeout(() => { status.textContent = ''; laadData(); }, 1500);
             });
         });
 
@@ -850,7 +765,6 @@
             document.getElementById('Epo').checked = (item['Epo'] === 'Ja');
             document.getElementById('Ijzer').checked = (item['Ijzer'] === 'Ja');
             document.getElementById('Shuntflow').checked = (item['Shuntflow'] === 'Ja');
-            
             document.getElementById('Resultaat shuntflow').value = item['Resultaat shuntflow'] || '';
             document.getElementById('Notities dialyse').value = item['Notities dialyse'] || '';
             document.getElementById('Bijzonderheden patiënt').value = item['Bijzonderheden patiënt'] || '';
@@ -865,15 +779,14 @@
             document.getElementById('formTitle').textContent = 'Dialyse Sessie Bewerken (Rij ' + item.rowIndex + ')';
             document.getElementById('submitBtn').textContent = 'Bijwerken';
             
-            schakelTab('invoer', document.querySelector('.win-tab'));
+            schakelTab('invoer', document.querySelectorAll('.win-tab')[0]);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function verwijderItem(rowIndex) {
             if (confirm('Weet je zeker dat je dit record wilt verwijderen?')) {
                 fetch(scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors',
+                    method: 'POST', mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ action: 'delete', rowIndex: rowIndex })
                 }).then(() => { setTimeout(laadData, 1000); });
@@ -883,17 +796,13 @@
         function genereerPDF(item) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
             doc.setFillColor(0, 103, 192);
             doc.rect(0, 0, 210, 30, 'F');
-
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(18);
             doc.text("DIALYSE RAPPORT", 15, 20);
-
             doc.setFontSize(10);
             doc.text(`ID: ${item['ID'] || '-'}`, 130, 20);
-
             doc.setTextColor(32, 32, 32);
             doc.setFontSize(12);
             let y = 45;
@@ -908,37 +817,17 @@
 
             addRow("Type Behandeling:", item['Dag/Nacht']);
             addRow("Planning / Schema:", item['Planning']);
-            addRow("Afspraak Datum/Tijd:", item['Afspraakdatumtijd'] ? item['Afspraakdatumtijd'].replace('T', ' ') : '-');
             addRow("Aansluit Datum/Tijd:", item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : '-');
-            addRow("Afsluit Datum/Tijd:", item['Afsluitdatumtijd'] ? item['Afsluitdatumtijd'].replace('T', ' ') : '-');
             addRow("Totale Tijd:", item['Totaaltijd']);
-            
-            y += 5;
-            doc.setLineWidth(0.5);
-            doc.line(15, y, 195, y);
-            y += 10;
-
+            y += 5; doc.setLineWidth(0.5); doc.line(15, y, 195, y); y += 10;
             addRow("Pre Gewicht:", (item['Pre gewicht'] || '-') + " kg");
             addRow("Post Gewicht:", (item['Post gewicht'] || '-') + " kg");
             addRow("Droog Gewicht:", (item['Droog gewicht'] || '-') + " kg");
             addRow("UF Advies:", (item['UF advies'] || '-') + " L");
-            addRow("UF Ingesteld:", (item['UF ingesteld'] || '-') + " L");
             addRow("Werkelijke UF:", (item['Werkelijke uf'] || '-') + " kg");
-
-            y += 5;
-            doc.line(15, y, 195, y);
-            y += 10;
-
-            addRow("Fragmin 2500:", item['Fragmin 2500'] || 'Geen');
-            addRow("Fragmin 5000:", item['Fragmin 5000'] || 'Geen');
-            addRow("Epo Toegediend:", item['Epo'] || 'Nee');
-            addRow("Ijzer Toegediend:", item['Ijzer'] || 'Nee');
-            addRow("Shuntflow Actief:", item['Shuntflow'] || 'Nee');
-            addRow("Resultaat Shuntflow:", item['Resultaat shuntflow'] || '-');
+            y += 5; doc.line(15, y, 195, y); y += 10;
             addRow("Verpleging:", item['Verpleging'] || '-');
             addRow("Notities:", item['Notities dialyse'] || '-');
-            addRow("Bijzonderheden Patiënt:", item['Bijzonderheden patiënt'] || '-');
-
             doc.save(`Dialyse_Rapport_${item['ID'] || 'sessie'}.pdf`);
         }
 
@@ -951,12 +840,10 @@
             document.getElementById('UF advies').className = '';
             document.getElementById('Werkelijke uf').value = '';
             document.getElementById('Totaaltijd').value = '';
-            let geselecteerd = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value);
-            laadVerplegersCheckboxen(geselecteerd);
+            laadVerplegersCheckboxen(verplegersLijst.filter(n => false));
             document.getElementById('formTitle').textContent = 'Nieuwe Dialyse Sessie Toevoegen';
             document.getElementById('submitBtn').textContent = 'Gegevens Opslaan';
         }
     </script>
-
 </body>
 </html>
