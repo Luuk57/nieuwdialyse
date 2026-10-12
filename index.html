@@ -36,91 +36,91 @@
             <input type="hidden" id="rowIndex">
             <div class="grid">
                 <div class="form-group">
-                    <label>ID / Kenmerk:</label>
-                    <input type="text" id="id" placeholder="Bijv. 001">
+                    <label>ID:</label>
+                    <input type="text" id="ID" placeholder="Bijv. 001">
                 </div>
                 <div class="form-group">
-                    <label>Dag / Nacht:</label>
-                    <select id="dagNacht">
-                        <option value="Dag">Dagdialyse</option>
-                        <option value="Nacht">Nachtdialyse</option>
+                    <label>Dag/Nacht:</label>
+                    <select id="Dag/Nacht">
+                        <option value="Dag">Dag</option>
+                        <option value="Nacht">Nacht</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Afspraak Datum/Tijd:</label>
-                    <input type="datetime-local" id="afspraak">
+                    <label>Afspraakdatumtijd:</label>
+                    <input type="datetime-local" id="Afspraakdatumtijd">
                 </div>
                 <div class="form-group">
-                    <label>Aansluit Datum/Tijd:</label>
-                    <input type="datetime-local" id="aansluit">
+                    <label>Aansluitdatumtijd:</label>
+                    <input type="datetime-local" id="Aansluitdatumtijd">
                 </div>
                 <div class="form-group">
-                    <label>Afsluit Datum/Tijd:</label>
-                    <input type="datetime-local" id="afsluit">
+                    <label>Afsluitdatumtijd:</label>
+                    <input type="datetime-local" id="Afsluitdatumtijd">
                 </div>
                 <div class="form-group">
                     <label>Totaaltijd:</label>
-                    <input type="text" id="totaalTijd" placeholder="Bijv. 8u">
+                    <input type="text" id="Totaaltijd" placeholder="Bijv. 8u">
                 </div>
                 <div class="form-group">
-                    <label>Pre Gewicht (kg):</label>
-                    <input type="number" step="0.1" id="preGewicht" placeholder="Bijv. 112.5" oninput="berekenUfAdvies()">
+                    <label>Pre gewicht:</label>
+                    <input type="number" step="0.1" id="Pre gewicht" placeholder="Bijv. 112.5" oninput="berekenUfAdvies()">
                 </div>
                 <div class="form-group">
-                    <label>Post Gewicht (kg):</label>
-                    <input type="number" step="0.1" id="postGewicht" placeholder="Bijv. 109.0">
+                    <label>Post gewicht:</label>
+                    <input type="number" step="0.1" id="Post gewicht" placeholder="Bijv. 109.0">
                 </div>
                 <div class="form-group">
-                    <label>Droog Gewicht (kg):</label>
-                    <input type="number" step="0.1" id="droogGewicht" value="109.0">
+                    <label>Droog gewicht:</label>
+                    <input type="number" step="0.1" id="Droog gewicht" value="109.0">
                 </div>
                 <div class="form-group">
-                    <label>UF Advies (L):</label>
-                    <input type="text" id="ufAdvies" readonly style="background: #e9ecef;">
+                    <label>UF advies:</label>
+                    <input type="text" id="UF advies" readonly style="background: #e9ecef;">
                 </div>
                 <div class="form-group">
-                    <label>UF Ingesteld:</label>
-                    <input type="number" step="0.1" id="ufIngesteld">
+                    <label>UF ingesteld:</label>
+                    <input type="number" step="0.1" id="UF ingesteld">
                 </div>
                 <div class="form-group">
-                    <label>Werkelijke UF:</label>
-                    <input type="number" step="0.1" id="werkelijkeUf">
+                    <label>Werkelijke uf:</label>
+                    <input type="number" step="0.1" id="Werkelijke uf">
                 </div>
                 <div class="form-group">
-                    <label>Fragmin 2500:</label>
-                    <input type="text" id="fragmin2500">
+                    <label>Fragmin (2500):</label>
+                    <input type="text" id="2500">
                 </div>
                 <div class="form-group">
-                    <label>Fragmin 5000:</label>
-                    <input type="text" id="fragmin5000">
+                    <label>Fragmin (5000):</label>
+                    <input type="text" id="5000">
                 </div>
                 <div class="form-group">
                     <label>Epo:</label>
-                    <input type="text" id="epo">
+                    <input type="text" id="Epo">
                 </div>
                 <div class="form-group">
                     <label>Ijzer:</label>
-                    <input type="text" id="ijzer">
+                    <input type="text" id="Ijzer">
                 </div>
                 <div class="form-group">
                     <label>Shuntflow:</label>
-                    <input type="text" id="shuntflow">
+                    <input type="text" id="Shuntflow">
                 </div>
                 <div class="form-group">
-                    <label>Resultaat Shuntflow:</label>
-                    <input type="text" id="resultaatShuntflow">
+                    <label>Resultaat shuntflow:</label>
+                    <input type="text" id="Resultaat shuntflow">
                 </div>
                 <div class="form-group">
                     <label>Verpleging:</label>
-                    <input type="text" id="verpleging">
+                    <input type="text" id="Verpleging">
                 </div>
                 <div class="form-group">
-                    <label>Notities Dialyse:</label>
-                    <input type="text" id="notities">
+                    <label>Notities dialyse:</label>
+                    <input type="text" id="Notities dialyse">
                 </div>
                 <div class="form-group" style="grid-column: span 2;">
-                    <label>Bijzonderheden Patiënt:</label>
-                    <textarea id="bijzonderheden" rows="2"></textarea>
+                    <label>Bijzonderheden patiënt:</label>
+                    <textarea id="Bijzonderheden patiënt" rows="2"></textarea>
                 </div>
             </div>
             <div style="margin-top: 15px;">
@@ -141,12 +141,12 @@
                     <tr>
                         <th>ID</th>
                         <th>Dag/Nacht</th>
-                        <th>Afspraak</th>
-                        <th>Pre Gew.</th>
-                        <th>Post Gew.</th>
-                        <th>Droog Gew.</th>
-                        <th>UF Advies</th>
-                        <th>UF Ingest.</th>
+                        <th>Afspraakdatumtijd</th>
+                        <th>Pre gewicht</th>
+                        <th>Post gewicht</th>
+                        <th>Droog gewicht</th>
+                        <th>UF advies</th>
+                        <th>UF ingesteld</th>
                         <th>Verpleging</th>
                         <th>Acties</th>
                     </tr>
@@ -159,21 +159,19 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxyVRN0wI8UbhxgEeyGDQZnEFJBgrd_l6qVIp0FNST1qSbpbK2pojdqK4n25OFOOKr-/exec'; // Plak hier je Google Apps Script URL
+        const scriptURL = 'JOUW_WEB_APP_URL_HIER'; // Plak hier je Google Apps Script URL
 
         window.onload = laadData;
 
-        // Automatische berekening UF Advies: pre gewicht - droog gewicht + 0.3
         function berekenUfAdvies() {
-            let pre = parseFloat(document.getElementById('preGewicht').value);
-            let droog = parseFloat(document.getElementById('droogGewicht').value) || 109.0;
+            let pre = parseFloat(document.getElementById('Pre gewicht').value);
+            let droog = parseFloat(document.getElementById('Droog gewicht').value) || 109.0;
             
             if (!isNaN(pre)) {
                 let advies = (pre - droog + 0.3).toFixed(2);
-                let ufField = document.getElementById('ufAdvies');
+                let ufField = document.getElementById('UF advies');
                 ufField.value = advies;
                 
-                // Kleurcodering toepassen op het invoerveld
                 ufField.className = '';
                 let val = parseFloat(advies);
                 if (val >= 4.5) {
@@ -184,12 +182,11 @@
                     ufField.classList.add('uf-groen');
                 }
             } else {
-                document.getElementById('ufAdvies').value = '';
-                document.getElementById('ufAdvies').className = '';
+                document.getElementById('UF advies').value = '';
+                document.getElementById('UF advies').className = '';
             }
         }
 
-        // Data ophalen uit Google Sheet
         function laadData() {
             fetch(scriptURL)
                 .then(res => res.json())
@@ -203,23 +200,22 @@
                     data.reverse().forEach(item => {
                         let tr = document.createElement('tr');
                         
-                        // Bepaal kleurklasse voor de tabel cel op basis van UF advies
-                        let ufVal = parseFloat(item.ufAdvies) || 0;
+                        let ufVal = parseFloat(item['UF advies']) || 0;
                         let ufKleurClass = '';
                         if (ufVal >= 4.5) ufKleurClass = 'uf-rood';
                         else if (ufVal >= 4.0) ufKleurClass = 'uf-oranje';
                         else if (ufVal > 0) ufKleurClass = 'uf-groen';
 
                         tr.innerHTML = `
-                            <td>${item.id || ''}</td>
-                            <td>${item.dagNacht || ''}</td>
-                            <td>${item.afspraak ? item.afspraak.replace('T', ' ') : ''}</td>
-                            <td>${item.preGewicht || ''}</td>
-                            <td>${item.postGewicht || ''}</td>
-                            <td>${item.droogGewicht || ''}</td>
-                            <td class="${ufKleurClass}">${item.ufAdvies || ''}</td>
-                            <td>${item.ufIngesteld || ''}</td>
-                            <td>${item.verpleging || ''}</td>
+                            <td>${item['ID'] || ''}</td>
+                            <td>${item['Dag/Nacht'] || ''}</td>
+                            <td>${item['Afspraakdatumtijd'] ? item['Afspraakdatumtijd'].replace('T', ' ') : ''}</td>
+                            <td>${item['Pre gewicht'] || ''}</td>
+                            <td>${item['Post gewicht'] || ''}</td>
+                            <td>${item['Droog gewicht'] || ''}</td>
+                            <td class="${ufKleurClass}">${item['UF advies'] || ''}</td>
+                            <td>${item['UF ingesteld'] || ''}</td>
+                            <td>${item['Verpleging'] || ''}</td>
                             <td>
                                 <button class="btn-edit" onclick='bewerkItem(${JSON.stringify(item)})'>Bewerken</button>
                                 <button class="btn-del" onclick="verwijderItem(${item.rowIndex})">Wis</button>
@@ -234,7 +230,6 @@
                 });
         }
 
-        // Formulier verzenden (opslaan of bewerken)
         document.getElementById('dialyseForm').addEventListener('submit', e => {
             e.preventDefault();
             const status = document.getElementById('status');
@@ -243,27 +238,27 @@
 
             const payload = {
                 rowIndex: document.getElementById('rowIndex').value,
-                id: document.getElementById('id').value,
-                dagNacht: document.getElementById('dagNacht').value,
-                afspraak: document.getElementById('afspraak').value,
-                aansluit: document.getElementById('aansluit').value,
-                afsluit: document.getElementById('afsluit').value,
-                totaalTijd: document.getElementById('totaalTijd').value,
-                preGewicht: document.getElementById('preGewicht').value,
-                postGewicht: document.getElementById('postGewicht').value,
-                droogGewicht: document.getElementById('droogGewicht').value,
-                ufAdvies: document.getElementById('ufAdvies').value,
-                ufIngesteld: document.getElementById('ufIngesteld').value,
-                werkelijkeUf: document.getElementById('werkelijkeUf').value,
-                fragmin2500: document.getElementById('fragmin2500').value,
-                fragmin5000: document.getElementById('fragmin5000').value,
-                epo: document.getElementById('epo').value,
-                ijzer: document.getElementById('ijzer').value,
-                shuntflow: document.getElementById('shuntflow').value,
-                resultaatShuntflow: document.getElementById('resultaatShuntflow').value,
-                verpleging: document.getElementById('verpleging').value,
-                notities: document.getElementById('notities').value,
-                bijzonderheden: document.getElementById('bijzonderheden').value
+                "ID": document.getElementById('ID').value,
+                "Dag/Nacht": document.getElementById('Dag/Nacht').value,
+                "Afspraakdatumtijd": document.getElementById('Afspraakdatumtijd').value,
+                "Aansluitdatumtijd": document.getElementById('Aansluitdatumtijd').value,
+                "Afsluitdatumtijd": document.getElementById('Afsluitdatumtijd').value,
+                "Totaaltijd": document.getElementById('Totaaltijd').value,
+                "Pre gewicht": document.getElementById('Pre gewicht').value,
+                "Post gewicht": document.getElementById('Post gewicht').value,
+                "Droog gewicht": document.getElementById('Droog gewicht').value,
+                "UF advies": document.getElementById('UF advies').value,
+                "UF ingesteld": document.getElementById('UF ingesteld').value,
+                "Werkelijke uf": document.getElementById('Werkelijke uf').value,
+                "2500": document.getElementById('2500').value,
+                "5000": document.getElementById('5000').value,
+                "Epo": document.getElementById('Epo').value,
+                "Ijzer": document.getElementById('Ijzer').value,
+                "Shuntflow": document.getElementById('Shuntflow').value,
+                "Resultaat shuntflow": document.getElementById('Resultaat shuntflow').value,
+                "Verpleging": document.getElementById('Verpleging').value,
+                "Notities dialyse": document.getElementById('Notities dialyse').value,
+                "Bijzonderheden patiënt": document.getElementById('Bijzonderheden patiënt').value
             };
 
             fetch(scriptURL, {
@@ -273,9 +268,9 @@
                 body: JSON.stringify(payload)
             }).then(() => {
                 status.style.color = 'green';
-                status.textContent = 'Succesvol opgeslagen!';
+                status.textContent = 'Succesvol opgeslagen in tabblad "Dialyse"!';
                 resetForm();
-                setTimeout(() => { status.textContent = ''; laadData(); }, 1200);
+                setTimeout(() => { status.textContent = ''; laadData(); }, 1500);
             }).catch(err => {
                 status.style.color = 'red';
                 status.textContent = 'Fout bij opslaan.';
@@ -284,26 +279,26 @@
 
         function bewerkItem(item) {
             document.getElementById('rowIndex').value = item.rowIndex;
-            document.getElementById('id').value = item.id;
-            document.getElementById('dagNacht').value = item.dagNacht || 'Dag';
-            document.getElementById('afspraak').value = item.afspraak ? item.afspraak.slice(0,16) : '';
-            document.getElementById('aansluit').value = item.aansluit ? item.aansluit.slice(0,16) : '';
-            document.getElementById('afsluit').value = item.afsluit ? item.afsluit.slice(0,16) : '';
-            document.getElementById('totaalTijd').value = item.totaalTijd;
-            document.getElementById('preGewicht').value = item.preGewicht;
-            document.getElementById('postGewicht').value = item.postGewicht;
-            document.getElementById('droogGewicht').value = item.droogGewicht || 109.0;
-            document.getElementById('ufIngesteld').value = item.ufIngesteld;
-            document.getElementById('werkelijkeUf').value = item.werkelijkeUf;
-            document.getElementById('fragmin2500').value = item.fragmin2500;
-            document.getElementById('fragmin5000').value = item.fragmin5000;
-            document.getElementById('epo').value = item.epo;
-            document.getElementById('ijzer').value = item.ijzer;
-            document.getElementById('shuntflow').value = item.shuntflow;
-            document.getElementById('resultaatShuntflow').value = item.resultaatShuntflow;
-            document.getElementById('verpleging').value = item.verpleging;
-            document.getElementById('notities').value = item.notities;
-            document.getElementById('bijzonderheden').value = item.bijzonderheden;
+            document.getElementById('ID').value = item['ID'] || '';
+            document.getElementById('Dag/Nacht').value = item['Dag/Nacht'] || 'Dag';
+            document.getElementById('Afspraakdatumtijd').value = item['Afspraakdatumtijd'] ? item['Afspraakdatumtijd'].slice(0,16) : '';
+            document.getElementById('Aansluitdatumtijd').value = item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].slice(0,16) : '';
+            document.getElementById('Afsluitdatumtijd').value = item['Afsluitdatumtijd'] ? item['Afsluitdatumtijd'].slice(0,16) : '';
+            document.getElementById('Totaaltijd').value = item['Totaaltijd'] || '';
+            document.getElementById('Pre gewicht').value = item['Pre gewicht'] || '';
+            document.getElementById('Post gewicht').value = item['Post gewicht'] || '';
+            document.getElementById('Droog gewicht').value = item['Droog gewicht'] || '109.0';
+            document.getElementById('UF ingesteld').value = item['UF ingesteld'] || '';
+            document.getElementById('Werkelijke uf').value = item['Werkelijke uf'] || '';
+            document.getElementById('2500').value = item['2500'] || '';
+            document.getElementById('5000').value = item['5000'] || '';
+            document.getElementById('Epo').value = item['Epo'] || '';
+            document.getElementById('Ijzer').value = item['Ijzer'] || '';
+            document.getElementById('Shuntflow').value = item['Shuntflow'] || '';
+            document.getElementById('Resultaat shuntflow').value = item['Resultaat shuntflow'] || '';
+            document.getElementById('Verpleging').value = item['Verpleging'] || '';
+            document.getElementById('Notities dialyse').value = item['Notities dialyse'] || '';
+            document.getElementById('Bijzonderheden patiënt').value = item['Bijzonderheden patiënt'] || '';
             
             berekenUfAdvies();
             document.getElementById('formTitle').textContent = 'Dialyse Sessie Bewerken';
@@ -325,9 +320,9 @@
         function resetForm() {
             document.getElementById('dialyseForm').reset();
             document.getElementById('rowIndex').value = '';
-            document.getElementById('droogGewicht').value = '109.0';
-            document.getElementById('ufAdvies').value = '';
-            document.getElementById('ufAdvies').className = '';
+            document.getElementById('Droog gewicht').value = '109.0';
+            document.getElementById('UF advies').value = '';
+            document.getElementById('UF advies').className = '';
             document.getElementById('formTitle').textContent = 'Nieuwe Dialyse Sessie Toevoegen';
             document.getElementById('submitBtn').textContent = 'Gegevens Opslaan';
         }
