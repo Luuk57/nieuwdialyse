@@ -3,172 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dialyse Systeem - Windows Stijl</title>
-    <!-- jsPDF bibliotheek voor professionele PDF export -->
+    <title>Dialyse Beheersysteem - Windows 11</title>
+    <!-- jsPDF voor PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
-            --win-bg: #f3f3f3;
-            --win-window-bg: #ffffff;
-            --win-border: #cccccc;
-            --win-border-dark: #7a7a7a;
-            --win-blue: #005fb8;
-            --win-blue-hover: #004385;
-            --win-text: #1b1b1b;
+            --win-bg: #e0e0e0;
+            --win-window-bg: #f9f9f9;
+            --win-border: #8f8f8f;
+            --win-border-light: #d1d1d1;
+            --win-blue: #0067c0;
+            --win-blue-hover: #005aab;
+            --win-text: #202020;
+            --win-text-secondary: #5f5f5f;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--win-bg);
             color: var(--win-text);
             margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: center;
         }
 
         .win-window {
             background: var(--win-window-bg);
-            border: 1px solid var(--win-border-dark);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            max-width: 1200px;
-            margin: 0 auto;
-            border-radius: 4px;
+            border: 1px solid var(--win-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 1250px;
+            border-radius: 8px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
+        /* Windows 11 Titelbalk */
         .win-titlebar {
-            background: #eef2f7;
-            border-bottom: 1px solid var(--win-border);
-            padding: 10px 15px;
-            font-weight: 600;
-            font-size: 14px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--win-border-light);
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 500;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            user-select: none;
+        }
+
+        .win-titlebar-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .win-titlebar-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .win-control-btn {
+            width: 32px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--win-text);
+        }
+
+        .win-control-btn:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .win-control-btn.close:hover {
+            background: #e81123;
+            color: white;
+        }
+
+        /* Windows 11 Navigatie Tabs */
+        .win-tabs {
+            display: flex;
+            background: #f3f3f3;
+            border-bottom: 1px solid var(--win-border-light);
+            padding: 0 12px;
+            gap: 4px;
+        }
+
+        .win-tab {
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--win-text-secondary);
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            position: relative;
+        }
+
+        .win-tab:hover {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--win-text);
+        }
+
+        .win-tab.active {
+            background: var(--win-window-bg);
+            color: var(--win-text);
+            font-weight: 600;
+        }
+
+        .win-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 12px;
+            right: 12px;
+            height: 3px;
+            background: var(--win-blue);
+            border-radius: 2px 2px 0 0;
         }
 
         .win-content {
-            padding: 20px;
-            max-height: 85vh;
+            padding: 24px;
+            max-height: 80vh;
             overflow-y: auto;
+            background: var(--win-window-bg);
         }
 
-        fieldset {
-            border: 1px solid var(--win-border);
-            border-radius: 3px;
-            padding: 15px;
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Windows 11 Groepen / Kaarten */
+        .win-groupbox {
+            border: 1px solid var(--win-border-light);
+            border-radius: 6px;
+            padding: 18px;
             margin-bottom: 20px;
-            background: #fafafa;
+            background: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        legend {
+        .win-groupbox-title {
             font-weight: 600;
-            padding: 0 5px;
+            font-size: 14px;
             color: var(--win-blue);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
         }
 
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 4px;
         }
 
         label {
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 500;
+            color: var(--win-text-secondary);
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 6px 8px;
+            padding: 8px 10px;
             box-sizing: border-box;
-            border: 1px solid var(--win-border-dark);
-            border-radius: 2px;
+            border: 1px solid var(--win-border);
+            border-radius: 4px;
             font-family: inherit;
             font-size: 13px;
-            background: white;
+            background: #ffffff;
+            transition: border-color 0.15s, box-shadow 0.15s;
         }
 
         input:focus, select:focus, textarea:focus {
             border-color: var(--win-blue);
             outline: none;
-            box-shadow: 0 0 0 1px var(--win-blue);
+            box-shadow: 0 0 0 2px rgba(0, 103, 192, 0.2);
         }
 
         .checkbox-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
-            background: white;
-            padding: 5px;
-            border: 1px solid var(--win-border-dark);
-            border-radius: 2px;
+            background: #fbfbfb;
+            padding: 8px 10px;
+            border: 1px solid var(--win-border);
+            border-radius: 4px;
         }
 
         .checkbox-group label {
             font-weight: normal;
-            font-size: 11px;
+            font-size: 12px;
             margin-bottom: 0;
             cursor: pointer;
+            color: var(--win-text);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .checkbox-group input {
-            width: auto;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--win-blue);
         }
 
-        .btn {
-            padding: 6px 14px;
+        /* Windows 11 Knoppen */
+        .win-btn {
+            padding: 8px 16px;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            border: 1px solid var(--win-border-dark);
-            border-radius: 2px;
-            background: #e1e1e1;
-            color: black;
+            border: 1px solid var(--win-border);
+            border-radius: 4px;
+            background: #fcfcfc;
+            color: var(--win-text);
+            transition: background 0.1s, border-color 0.1s;
         }
 
-        .btn:hover { background: #d5d5d5; }
-        .btn-primary { background: var(--win-blue); color: white; border-color: var(--win-blue-hover); }
-        .btn-primary:hover { background: var(--win-blue-hover); }
-        .btn-danger { background: #d13438; color: white; border-color: #a4262c; }
-        .btn-danger:hover { background: #a4262c; }
-        .btn-warning { background: #f7630c; color: white; border-color: #ca5010; }
-        .btn-pdf { background: #107c41; color: white; border-color: #0b542c; }
-        .btn-pdf:hover { background: #0b542c; }
+        .win-btn:hover {
+            background: #f2f2f2;
+            border-color: #707070;
+        }
 
+        .win-btn:active {
+            background: #e6e6e6;
+        }
+
+        .win-btn-primary {
+            background: var(--win-blue);
+            color: white;
+            border-color: var(--win-blue-hover);
+        }
+
+        .win-btn-primary:hover {
+            background: var(--win-blue-hover);
+            color: white;
+        }
+
+        .win-btn-danger {
+            background: #fdf3f4;
+            color: #d13438;
+            border-color: #f17075;
+        }
+
+        .win-btn-danger:hover {
+            background: #d13438;
+            color: white;
+        }
+
+        .win-btn-warning {
+            background: #fff8ec;
+            color: #bc4b00;
+            border-color: #fce1c0;
+        }
+
+        .win-btn-warning:hover {
+            background: #ca5010;
+            color: white;
+        }
+
+        .win-btn-pdf {
+            background: #eef6f0;
+            color: #107c41;
+            border-color: #b3e0c0;
+        }
+
+        .win-btn-pdf:hover {
+            background: #107c41;
+            color: white;
+        }
+
+        /* Tabel Styling in Win11 Stijl */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
             font-size: 12px;
             background: white;
+            border: 1px solid var(--win-border-light);
+            border-radius: 4px;
+            overflow: hidden;
         }
 
         th, td {
-            border: 1px solid var(--win-border);
-            padding: 8px;
+            border-bottom: 1px solid var(--win-border-light);
+            padding: 10px 12px;
             text-align: left;
         }
 
-        th { background-color: #f0f0f0; font-weight: 600; }
+        th {
+            background-color: #f3f3f3;
+            font-weight: 600;
+            color: var(--win-text);
+        }
 
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        /* Kleurcodering UF */
         .uf-groen { background-color: #d4edda !important; color: #155724; font-weight: bold; }
         .uf-oranje { background-color: #fff3cd !important; color: #856404; font-weight: bold; }
         .uf-rood { background-color: #f8d7da !important; color: #721c24; font-weight: bold; }
 
-        .status-bar { margin-top: 10px; font-weight: 600; font-size: 13px; }
-        
+        .status-bar {
+            margin-top: 12px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
         .verpleging-box {
-            background: white;
-            border: 1px solid var(--win-border-dark);
-            border-radius: 2px;
-            padding: 6px;
-            max-height: 110px;
+            background: #ffffff;
+            border: 1px solid var(--win-border);
+            border-radius: 4px;
+            padding: 8px;
+            max-height: 120px;
             overflow-y: auto;
         }
     </style>
@@ -176,186 +347,213 @@
 <body>
 
     <div class="win-window">
+        <!-- Windows 11 Titelbalk -->
         <div class="win-titlebar">
-            <span>🗂️ Dialyse Systeem (Config Sync Edition)</span>
-            <span>v3.0</span>
+            <div class="win-titlebar-left">
+                <span>🏥</span>
+                <span>Dialyse Beheersysteem - Gekoppeld aan Google Sheets (Config Sync)</span>
+            </div>
+            <div class="win-titlebar-buttons">
+                <button class="win-control-btn" title="Minimaliseren">🗕</button>
+                <button class="win-control-btn" title="Optimaliseren">🗖</button>
+                <button class="win-control-btn close" title="Sluiten">✕</button>
+            </div>
         </div>
+
+        <!-- Windows 11 Navigatie Tabs -->
+        <div class="win-tabs">
+            <button class="win-tab active" onclick="schakelTab('invoer', this)">Invoer & Sessie</button>
+            <button class="win-tab" onclick="schakelTab('overzicht', this)">Overzicht & Rapportage</button>
+        </div>
+
         <div class="win-content">
 
-            <!-- FORMULIER SECTIE -->
-            <fieldset>
-                <legend id="formTitle">Nieuwe Dialyse Sessie Toevoegen</legend>
-                <form id="dialyseForm">
-                    <input type="hidden" id="rowIndex">
-                    <div class="grid">
-                        <div class="form-group">
-                            <label>ID (Automatisch / Aanpasbaar):</label>
-                            <input type="text" id="ID" placeholder="Wordt automatisch gegenereerd">
-                        </div>
-                        <div class="form-group">
-                            <label>Dag/Nacht:</label>
-                            <select id="Dag/Nacht">
-                                <option value="Dag">Dag</option>
-                                <option value="Nacht">Nacht</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Afspraakdatumtijd:</label>
-                            <input type="datetime-local" id="Afspraakdatumtijd">
-                        </div>
-                        <div class="form-group">
-                            <label>Aansluitdatumtijd:</label>
-                            <input type="datetime-local" id="Aansluitdatumtijd" oninput="berekenTotaalTijd()">
-                        </div>
-                        <div class="form-group">
-                            <label>Afsluitdatumtijd:</label>
-                            <input type="datetime-local" id="Afsluitdatumtijd" oninput="berekenTotaalTijd()">
-                        </div>
-                        <div class="form-group">
-                            <label>Totaaltijd (Automatisch):</label>
-                            <input type="text" id="Totaaltijd" readonly style="background: #e9ecef;">
-                        </div>
-                        <div class="form-group">
-                            <label>Pre gewicht (kg):</label>
-                            <input type="number" step="0.1" id="Pre gewicht" placeholder="Bijv. 112.5" oninput="berekenGegevens()">
-                        </div>
-                        <div class="form-group">
-                            <label>Post gewicht (kg):</label>
-                            <input type="number" step="0.1" id="Post gewicht" placeholder="Bijv. 109.0" oninput="berekenGegevens()">
-                        </div>
-                        <div class="form-group">
-                            <label>Droog gewicht (kg):</label>
-                            <input type="number" step="0.1" id="Droog gewicht" value="109.0" oninput="berekenGegevens()">
-                        </div>
-                        <div class="form-group">
-                            <label>UF advies:</label>
-                            <input type="text" id="UF advies" readonly style="background: #e9ecef;">
-                        </div>
-                        <div class="form-group">
-                            <label>UF ingesteld:</label>
-                            <input type="number" step="0.1" id="UF ingesteld">
-                        </div>
-                        <div class="form-group">
-                            <label>Werkelijke uf (Post - Pre):</label>
-                            <input type="text" id="Werkelijke uf" readonly style="background: #e9ecef;">
-                        </div>
-                        
-                        <!-- Fragmin 2500 (4 hokjes) -->
-                        <div class="form-group">
-                            <label>Fragmin 2500 (4x):</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" name="f2500" value="1"> 1</label>
-                                <label><input type="checkbox" name="f2500" value="2"> 2</label>
-                                <label><input type="checkbox" name="f2500" value="3"> 3</label>
-                                <label><input type="checkbox" name="f2500" value="4"> 4</label>
+            <!-- TAB 1: INVOER -->
+            <div id="tab-invoer" class="tab-content active">
+                <div class="win-groupbox">
+                    <div class="win-groupbox-title" id="formTitle">Nieuwe Dialyse Sessie Toevoegen</div>
+                    <form id="dialyseForm">
+                        <input type="hidden" id="rowIndex">
+                        <div class="grid">
+                            <div class="form-group">
+                                <label>ID (Automatisch / Aanpasbaar):</label>
+                                <input type="text" id="ID" placeholder="Wordt automatisch gegenereerd">
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <label>Dag/Nacht:</label>
+                                <select id="Dag/Nacht">
+                                    <option value="Dag">Dag</option>
+                                    <option value="Nacht">Nacht</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Afspraakdatumtijd:</label>
+                                <input type="datetime-local" id="Afspraakdatumtijd">
+                            </div>
+                            <div class="form-group">
+                                <label>Aansluitdatumtijd:</label>
+                                <input type="datetime-local" id="Aansluitdatumtijd" oninput="berekenTotaalTijd()">
+                            </div>
+                            <div class="form-group">
+                                <label>Afsluitdatumtijd:</label>
+                                <input type="datetime-local" id="Afsluitdatumtijd" oninput="berekenTotaalTijd()">
+                            </div>
+                            <div class="form-group">
+                                <label>Totaaltijd (Automatisch):</label>
+                                <input type="text" id="Totaaltijd" readonly style="background: #f2f2f2;">
+                            </div>
+                            <div class="form-group">
+                                <label>Pre gewicht (kg):</label>
+                                <input type="number" step="0.1" id="Pre gewicht" placeholder="Bijv. 112.5" oninput="berekenGegevens()">
+                            </div>
+                            <div class="form-group">
+                                <label>Post gewicht (kg):</label>
+                                <input type="number" step="0.1" id="Post gewicht" placeholder="Bijv. 109.0" oninput="berekenGegevens()">
+                            </div>
+                            <div class="form-group">
+                                <label>Droog gewicht (kg):</label>
+                                <input type="number" step="0.1" id="Droog gewicht" value="109.0" oninput="berekenGegevens()">
+                            </div>
+                            <div class="form-group">
+                                <label>UF advies:</label>
+                                <input type="text" id="UF advies" readonly style="background: #f2f2f2;">
+                            </div>
+                            <div class="form-group">
+                                <label>UF ingesteld:</label>
+                                <input type="number" step="0.1" id="UF ingesteld">
+                            </div>
+                            <div class="form-group">
+                                <label>Werkelijke uf (Post - Pre):</label>
+                                <input type="text" id="Werkelijke uf" readonly style="background: #f2f2f2;">
+                            </div>
+                            
+                            <!-- Fragmin 2500 -->
+                            <div class="form-group">
+                                <label>Fragmin 2500 (4x):</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" name="f2500" value="1"> 1</label>
+                                    <label><input type="checkbox" name="f2500" value="2"> 2</label>
+                                    <label><input type="checkbox" name="f2500" value="3"> 3</label>
+                                    <label><input type="checkbox" name="f2500" value="4"> 4</label>
+                                </div>
+                            </div>
 
-                        <!-- Fragmin 5000 (4 hokjes) -->
-                        <div class="form-group">
-                            <label>Fragmin 5000 (4x):</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" name="f5000" value="1"> 1</label>
-                                <label><input type="checkbox" name="f5000" value="2"> 2</label>
-                                <label><input type="checkbox" name="f5000" value="3"> 3</label>
-                                <label><input type="checkbox" name="f5000" value="4"> 4</label>
+                            <!-- Fragmin 5000 -->
+                            <div class="form-group">
+                                <label>Fragmin 5000 (4x):</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" name="f5000" value="1"> 1</label>
+                                    <label><input type="checkbox" name="f5000" value="2"> 2</label>
+                                    <label><input type="checkbox" name="f5000" value="3"> 3</label>
+                                    <label><input type="checkbox" name="f5000" value="4"> 4</label>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Epo, IJzer, Shuntflow als aanvinkhokjes -->
-                        <div class="form-group">
-                            <label>Epo:</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" id="Epo" value="Ja"> Toegediend (Ja)</label>
+                            <!-- Medicatie vinkjes -->
+                            <div class="form-group">
+                                <label>Epo:</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="Epo" value="Ja"> Toegediend (Ja)</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Ijzer:</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" id="Ijzer" value="Ja"> Toegediend (Ja)</label>
+                            <div class="form-group">
+                                <label>Ijzer:</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="Ijzer" value="Ja"> Toegediend (Ja)</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Shuntflow:</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" id="Shuntflow" value="Ja"> Actief / Aanwezig (Ja)</label>
+                            <div class="form-group">
+                                <label>Shuntflow:</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="Shuntflow" value="Ja"> Actief / Aanwezig (Ja)</label>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label>Resultaat shuntflow (max 4 digits):</label>
-                            <input type="number" id="Resultaat shuntflow" max="9999" placeholder="Bijv. 1200">
-                        </div>
-
-                        <!-- Verpleging: Meerdere keuzes + live sync met Config sheet -->
-                        <div class="form-group" style="grid-column: span 2;">
-                            <label>Verpleging (Gelezen uit Config-tabblad):</label>
-                            <div style="display: flex; gap: 10px; margin-bottom: 5px; flex-wrap: wrap;">
-                                <input type="text" id="nieuweVerplegerNaam" placeholder="Typ nieuwe naam..." style="max-width: 220px;">
-                                <button type="button" class="btn" onclick="voegVerplegerToe()">+ Naam Toevoegen</button>
-                                <button type="button" class="btn btn-danger" onclick="verwijderVerplegerUitLijst()">- Verwijder geselecteerde</button>
+                            <div class="form-group">
+                                <label>Resultaat shuntflow (max 4 digits):</label>
+                                <input type="number" id="Resultaat shuntflow" max="9999" placeholder="Bijv. 1200">
                             </div>
-                            <div id="verplegingContainer" class="verpleging-box">
-                                Laden...
+
+                            <!-- Verpleging gesynchroniseerd met Config -->
+                            <div class="form-group" style="grid-column: span 2;">
+                                <label>Verpleging (Gelezen & gesynchroniseerd via Config-tabblad):</label>
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+                                    <input type="text" id="nieuweVerplegerNaam" placeholder="Typ nieuwe naam..." style="max-width: 220px;">
+                                    <button type="button" class="win-btn" onclick="voegVerplegerToe()">+ Toevoegen aan Config</button>
+                                    <button type="button" class="win-btn win-btn-danger" onclick="verwijderVerplegerUitLijst()">- Verwijder geselecteerde</button>
+                                </div>
+                                <div id="verplegingContainer" class="verpleging-box">
+                                    Laden...
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Notities dialyse:</label>
+                                <input type="text" id="Notities dialyse">
+                            </div>
+                            <div class="form-group" style="grid-column: span 2;">
+                                <label>Bijzonderheden patiënt:</label>
+                                <textarea id="Bijzonderheden patiënt" rows="2"></textarea>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label>Notities dialyse:</label>
-                            <input type="text" id="Notities dialyse">
+                        <div style="margin-top: 18px; display: flex; gap: 10px;">
+                            <button type="submit" class="win-btn win-btn-primary" id="submitBtn">Gegevens Opslaan</button>
+                            <button type="button" class="win-btn" onclick="resetForm()">Annuleren / Reset</button>
                         </div>
-                        <div class="form-group" style="grid-column: span 2;">
-                            <label>Bijzonderheden patiënt:</label>
-                            <textarea id="Bijzonderheden patiënt" rows="2"></textarea>
-                        </div>
-                    </div>
-                    <div style="margin-top: 15px;">
-                        <button type="submit" class="btn btn-primary" id="submitBtn">Opslaan</button>
-                        <button type="button" class="btn" onclick="resetForm()">Annuleren / Reset</button>
-                    </div>
-                </form>
-                <div id="status" class="status-bar"></div>
-            </fieldset>
-
-            <!-- OVERZICHT TABEL -->
-            <fieldset>
-                <legend>Overzicht Sessies</legend>
-                <button class="btn" onclick="laadData()" style="margin-bottom: 10px;">Lijst Vernieuwen</button>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Dag/Nacht</th>
-                                <th>Aansluit</th>
-                                <th>Totaaltijd</th>
-                                <th>Pre Gew.</th>
-                                <th>Post Gew.</th>
-                                <th>Droog Gew.</th>
-                                <th>UF Advies</th>
-                                <th>Werkelijke UF</th>
-                                <th>Verpleging</th>
-                                <th>Acties</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelBody">
-                            <tr><td colspan="11">Gegevens laden...</td></tr>
-                        </tbody>
-                    </table>
+                    </form>
+                    <div id="status" class="status-bar"></div>
                 </div>
-            </fieldset>
+            </div>
+
+            <!-- TAB 2: OVERZICHT -->
+            <div id="tab-overzicht" class="tab-content">
+                <div class="win-groupbox">
+                    <div class="win-groupbox-title">Overzicht Alle Sessies</div>
+                    <button class="win-btn" onclick="laadData()" style="margin-bottom: 12px;">Lijst Vernieuwen</button>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Dag/Nacht</th>
+                                    <th>Aansluit</th>
+                                    <th>Totaaltijd</th>
+                                    <th>Pre Gew.</th>
+                                    <th>Post Gew.</th>
+                                    <th>Droog Gew.</th>
+                                    <th>UF Advies</th>
+                                    <th>Werkelijke UF</th>
+                                    <th>Verpleging</th>
+                                    <th>Acties</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelBody">
+                                <tr><td colspan="11">Gegevens laden...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyZFvXqmAU3Dt7ttvk5HmYb8HZHz5JFLUV9tLbT5LLeV4VJcJYhBFAg1Tj3Um43qHOv/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyZFvXqmAU3Dt7ttvk5HmYb8HZHz5JFLUV9tLbT5LLeV4VJcJYhBFAg1Tj3Um43qHOv/exec/exec';
         
         let verplegersLijst = [];
 
         window.onload = function() {
             laadData();
         };
+
+        function schakelTab(tabNaam, btnEl) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.win-tab').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabNaam).classList.add('active');
+            btnEl.classList.add('active');
+        }
 
         function laadVerplegersCheckboxen(geselecteerd = []) {
             const container = document.getElementById('verplegingContainer');
@@ -374,7 +572,6 @@
             });
         }
 
-        // Nieuwe verpleger toevoegen aan het Config tabblad via Google Script
         function voegVerplegerToe() {
             let input = document.getElementById('nieuweVerplegerNaam');
             let naam = input.value.trim();
@@ -386,12 +583,11 @@
                     body: JSON.stringify({ action: 'add_verpleger', naam: naam })
                 }).then(() => {
                     input.value = '';
-                    laadData(); // Ververs data vanuit Google Sheet Config
+                    setTimeout(laadData, 1000);
                 });
             }
         }
 
-        // Verpleger verwijderen uit het Config tabblad via Google Script
         function verwijderVerplegerUitLijst() {
             let teVerwijderen = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value);
             if (teVerwijderen.length === 0) {
@@ -409,7 +605,7 @@
                 });
 
                 Promise.all(promises).then(() => {
-                    laadData(); // Ververs data vanuit Google Sheet Config
+                    setTimeout(laadData, 1000);
                 });
             }
         }
@@ -464,19 +660,16 @@
             }
         }
 
-        // Laad zowel dialysesessies als de verplegerslijst direct vanuit de Google Sheet
         function laadData() {
             fetch(scriptURL)
                 .then(res => res.json())
                 .then(response => {
-                    // Update verplegerslijst uit Config tabblad
                     if (response.verplegers) {
                         verplegersLijst = response.verplegers;
                         let geselecteerd = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value);
                         laadVerplegersCheckboxen(geselecteerd);
                     }
 
-                    // Update dialyse tabel
                     const tbody = document.getElementById('tabelBody');
                     tbody.innerHTML = '';
                     let data = response.dialyse || [];
@@ -507,9 +700,9 @@
                             <td>${item['Werkelijke uf'] || ''}</td>
                             <td>${item['Verpleging'] || ''}</td>
                             <td>
-                                <button class="btn btn-warning" style="padding:2px 6px; font-size:10px;" onclick='bewerkItem(${JSON.stringify(item)})'>Bewerken</button>
-                                <button class="btn btn-danger" style="padding:2px 6px; font-size:10px;" onclick="verwijderItem(${item.rowIndex})">Wis</button>
-                                <button class="btn btn-pdf" style="padding:2px 6px; font-size:10px;" onclick='genereerPDF(${JSON.stringify(item)})'>PDF</button>
+                                <button class="win-btn win-btn-warning" style="padding:2px 6px; font-size:11px;" onclick='bewerkItem(${JSON.stringify(item)})'>Bewerken</button>
+                                <button class="win-btn win-btn-danger" style="padding:2px 6px; font-size:11px;" onclick="verwijderItem(${item.rowIndex})">Wis</button>
+                                <button class="win-btn win-btn-pdf" style="padding:2px 6px; font-size:11px;" onclick='genereerPDF(${JSON.stringify(item)})'>PDF</button>
                             </td>
                         `;
                         tbody.appendChild(tr);
@@ -569,7 +762,7 @@
                 body: JSON.stringify(payload)
             })
             .then(() => {
-                status.style.color = 'green';
+                status.style.color = '#107c41';
                 status.textContent = 'Gegevens succesvol opgeslagen in de Google Sheet!';
                 resetForm();
                 setTimeout(() => { 
@@ -579,7 +772,7 @@
             })
             .catch(err => {
                 console.error('Fout bij verzenden:', err);
-                status.style.color = 'red';
+                status.style.color = '#d13438';
                 status.textContent = 'Fout bij opslaan: ' + err;
             });
         });
@@ -615,6 +808,9 @@
             berekenGegevens();
             document.getElementById('formTitle').textContent = 'Dialyse Sessie Bewerken (Rij ' + item.rowIndex + ')';
             document.getElementById('submitBtn').textContent = 'Bijwerken';
+            
+            // Schakel automatisch over naar het invoer tabblad
+            schakelTab('invoer', document.querySelector('.win-tab'));
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -625,7 +821,7 @@
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ action: 'delete', rowIndex: rowIndex })
-                }).then(() => { laadData(); });
+                }).then(() => { setTimeout(laadData, 1000); });
             }
         }
 
@@ -633,7 +829,7 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            doc.setFillColor(0, 95, 184);
+            doc.setFillColor(0, 103, 192);
             doc.rect(0, 0, 210, 30, 'F');
 
             doc.setTextColor(255, 255, 255);
@@ -643,14 +839,14 @@
             doc.setFontSize(10);
             doc.text(`ID: ${item['ID'] || '-'}`, 130, 20);
 
-            doc.setTextColor(27, 27, 27);
+            doc.setTextColor(32, 32, 32);
             doc.setFontSize(12);
             let y = 45;
 
             function addRow(label, value) {
-                doc.setFont("Segoe UI", "bold");
+                doc.setFont("Helvetica", "bold");
                 doc.text(label, 15, y);
-                doc.setFont("Segoe UI", "normal");
+                doc.setFont("Helvetica", "normal");
                 doc.text(value ? value.toString() : '-', 75, y);
                 y += 10;
             }
@@ -698,9 +894,10 @@
             document.getElementById('UF advies').className = '';
             document.getElementById('Werkelijke uf').value = '';
             document.getElementById('Totaaltijd').value = '';
-            laadVerplegersCheckboxen([]);
+            let geselecteerd = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value);
+            laadVerplegersCheckboxen(geselecteerd);
             document.getElementById('formTitle').textContent = 'Nieuwe Dialyse Sessie Toevoegen';
-            document.getElementById('submitBtn').textContent = 'Opslaan';
+            document.getElementById('submitBtn').textContent = 'Gegevens Opslaan';
         }
     </script>
 
