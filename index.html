@@ -351,7 +351,7 @@
         <div class="win-titlebar">
             <div class="win-titlebar-left">
                 <span>🏥</span>
-                <span>Dialyse Beheersysteem - Gekoppeld aan Google Sheets (Config Sync)</span>
+                <span>Dialyse Beheersysteem - Windows 11 Edition</span>
             </div>
             <div class="win-titlebar-buttons">
                 <button class="win-control-btn" title="Minimaliseren">🗕</button>
@@ -363,6 +363,7 @@
         <!-- Windows 11 Navigatie Tabs -->
         <div class="win-tabs">
             <button class="win-tab active" onclick="schakelTab('invoer', this)">Invoer & Sessie</button>
+            <button class="win-tab" onclick="schakelTab('planning', this)">📅 Planning</button>
             <button class="win-tab" onclick="schakelTab('overzicht', this)">Overzicht & Rapportage</button>
         </div>
 
@@ -384,6 +385,16 @@
                                 <select id="Dag/Nacht">
                                     <option value="Dag">Dag</option>
                                     <option value="Nacht">Nacht</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Planning / Schema:</label>
+                                <select id="Planning">
+                                    <option value="Geen">Geen</option>
+                                    <option value="Elke dag">Elke dag</option>
+                                    <option value="Om de dag">Om de dag</option>
+                                    <option value="ma wo vrij">ma wo vrij</option>
+                                    <option value="di do za">di do za</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -474,7 +485,7 @@
                                 <input type="number" id="Resultaat shuntflow" max="9999" placeholder="Bijv. 1200">
                             </div>
 
-                            <!-- Verpleging gesynchroniseerd met Config -->
+                            <!-- Verpleging -->
                             <div class="form-group" style="grid-column: span 2;">
                                 <label>Verpleging (Gelezen & gesynchroniseerd via Config-tabblad):</label>
                                 <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
@@ -505,7 +516,31 @@
                 </div>
             </div>
 
-            <!-- TAB 2: OVERZICHT -->
+            <!-- TAB 2: PLANNING -->
+            <div id="tab-planning" class="tab-content">
+                <div class="win-groupbox">
+                    <div class="win-groupbox-title">📅 Actieve Dialyse Planning & Schema's</div>
+                    <p style="font-size: 13px; color: var(--win-text-secondary);">Hieronder zie je een overzicht van de geplande dialyseschema's per sessie:</p>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Dag / Nacht</th>
+                                    <th>Planning Schema</th>
+                                    <th>Aansluitdatum</th>
+                                    <th>Actie</th>
+                                </tr>
+                            </thead>
+                            <tbody id="planningTabelBody">
+                                <tr><td colspan="5">Gegevens laden...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: OVERZICHT -->
             <div id="tab-overzicht" class="tab-content">
                 <div class="win-groupbox">
                     <div class="win-groupbox-title">Overzicht Alle Sessies</div>
@@ -516,6 +551,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Dag/Nacht</th>
+                                    <th>Planning</th>
                                     <th>Aansluit</th>
                                     <th>Totaaltijd</th>
                                     <th>Pre Gew.</th>
@@ -528,7 +564,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tabelBody">
-                                <tr><td colspan="11">Gegevens laden...</td></tr>
+                                <tr><td colspan="12">Gegevens laden...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -539,7 +575,7 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyZFvXqmAU3Dt7ttvk5HmYb8HZHz5JFLUV9tLbT5LLeV4VJcJYhBFAg1Tj3Um43qHOv/exec/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyZFvXqmAU3Dt7ttvk5HmYb8HZHz5JFLUV9tLbT5LLeV4VJcJYhBFAg1Tj3Um43qHOv/exec';
         
         let verplegersLijst = [];
 
@@ -671,17 +707,21 @@
                     }
 
                     const tbody = document.getElementById('tabelBody');
+                    const planningTbody = document.getElementById('planningTabelBody');
                     tbody.innerHTML = '';
+                    planningTbody.innerHTML = '';
+                    
                     let data = response.dialyse || [];
 
                     if (!Array.isArray(data) || data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="11">Geen records gevonden.</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="12">Geen records gevonden.</td></tr>';
+                        planningTbody.innerHTML = '<tr><td colspan="5">Geen planning gevonden.</td></tr>';
                         return;
                     }
 
-                    data.reverse().forEach(item => {
+                    data.slice().reverse().forEach(item => {
+                        // Overzicht tabel rij
                         let tr = document.createElement('tr');
-                        
                         let ufVal = parseFloat(item['UF advies']) || 0;
                         let ufKleurClass = '';
                         if (ufVal >= 4.5) ufKleurClass = 'uf-rood';
@@ -691,6 +731,7 @@
                         tr.innerHTML = `
                             <td>${item['ID'] || ''}</td>
                             <td>${item['Dag/Nacht'] || ''}</td>
+                            <td><b>${item['Planning'] || 'Geen'}</b></td>
                             <td>${item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : ''}</td>
                             <td>${item['Totaaltijd'] || ''}</td>
                             <td>${item['Pre gewicht'] || ''}</td>
@@ -706,11 +747,24 @@
                             </td>
                         `;
                         tbody.appendChild(tr);
+
+                        // Planning tab tabel rij
+                        let ptr = document.createElement('tr');
+                        ptr.innerHTML = `
+                            <td>${item['ID'] || ''}</td>
+                            <td>${item['Dag/Nacht'] || ''}</td>
+                            <td><span style="background: #eef6f0; color: #107c41; padding: 3px 8px; border-radius: 4px; font-weight: 600;">${item['Planning'] || 'Geen'}</span></td>
+                            <td>${item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : '-'}</td>
+                            <td>
+                                <button class="win-btn win-btn-warning" style="padding:2px 6px; font-size:11px;" onclick='bewerkItem(${JSON.stringify(item)})'>Bewerken</button>
+                            </td>
+                        `;
+                        planningTbody.appendChild(ptr);
                     });
                 })
                 .catch(err => {
                     console.error('Fout bij laden:', err);
-                    document.getElementById('tabelBody').innerHTML = '<tr><td colspan="11">Fout bij laden van gegevens.</td></tr>';
+                    document.getElementById('tabelBody').innerHTML = '<tr><td colspan="12">Fout bij laden van gegevens.</td></tr>';
                 });
         }
 
@@ -734,6 +788,7 @@
                 rowIndex: document.getElementById('rowIndex').value || '',
                 "ID": idVal,
                 "Dag/Nacht": document.getElementById('Dag/Nacht').value,
+                "Planning": document.getElementById('Planning').value,
                 "Afspraakdatumtijd": document.getElementById('Afspraakdatumtijd').value,
                 "Aansluitdatumtijd": document.getElementById('Aansluitdatumtijd').value,
                 "Afsluitdatumtijd": document.getElementById('Afsluitdatumtijd').value,
@@ -781,6 +836,7 @@
             document.getElementById('rowIndex').value = item.rowIndex;
             document.getElementById('ID').value = item['ID'] || '';
             document.getElementById('Dag/Nacht').value = item['Dag/Nacht'] || 'Dag';
+            document.getElementById('Planning').value = item['Planning'] || 'Geen';
             document.getElementById('Afspraakdatumtijd').value = item['Afspraakdatumtijd'] ? item['Afspraakdatumtijd'].slice(0,16) : '';
             document.getElementById('Aansluitdatumtijd').value = item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].slice(0,16) : '';
             document.getElementById('Afsluitdatumtijd').value = item['Afsluitdatumtijd'] ? item['Afsluitdatumtijd'].slice(0,16) : '';
@@ -809,7 +865,6 @@
             document.getElementById('formTitle').textContent = 'Dialyse Sessie Bewerken (Rij ' + item.rowIndex + ')';
             document.getElementById('submitBtn').textContent = 'Bijwerken';
             
-            // Schakel automatisch over naar het invoer tabblad
             schakelTab('invoer', document.querySelector('.win-tab'));
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -852,6 +907,7 @@
             }
 
             addRow("Type Behandeling:", item['Dag/Nacht']);
+            addRow("Planning / Schema:", item['Planning']);
             addRow("Afspraak Datum/Tijd:", item['Afspraakdatumtijd'] ? item['Afspraakdatumtijd'].replace('T', ' ') : '-');
             addRow("Aansluit Datum/Tijd:", item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : '-');
             addRow("Afsluit Datum/Tijd:", item['Afsluitdatumtijd'] ? item['Afsluitdatumtijd'].replace('T', ' ') : '-');
@@ -889,6 +945,7 @@
         function resetForm() {
             document.getElementById('dialyseForm').reset();
             document.getElementById('rowIndex').value = '';
+            document.getElementById('Planning').value = 'Geen';
             document.getElementById('Droog gewicht').value = '109.0';
             document.getElementById('UF advies').value = '';
             document.getElementById('UF advies').className = '';
