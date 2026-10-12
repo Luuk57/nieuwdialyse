@@ -177,8 +177,8 @@
 
     <div class="win-window">
         <div class="win-titlebar">
-            <span>🗂️ Dialyse Systeem (Windows Edition)</span>
-            <span>v2.3</span>
+            <span>🗂️ Dialyse Systeem (Config Sync Edition)</span>
+            <span>v3.0</span>
         </div>
         <div class="win-content">
 
@@ -287,16 +287,16 @@
                             <input type="number" id="Resultaat shuntflow" max="9999" placeholder="Bijv. 1200">
                         </div>
 
-                        <!-- Verpleging: Meerdere keuzes + live toevoegen + verwijderen -->
+                        <!-- Verpleging: Meerdere keuzes + live sync met Config sheet -->
                         <div class="form-group" style="grid-column: span 2;">
-                            <label>Verpleging (Selecteerbaar, toevoegen & verwijderen):</label>
+                            <label>Verpleging (Gelezen uit Config-tabblad):</label>
                             <div style="display: flex; gap: 10px; margin-bottom: 5px; flex-wrap: wrap;">
                                 <input type="text" id="nieuweVerplegerNaam" placeholder="Typ nieuwe naam..." style="max-width: 220px;">
                                 <button type="button" class="btn" onclick="voegVerplegerToe()">+ Naam Toevoegen</button>
                                 <button type="button" class="btn btn-danger" onclick="verwijderVerplegerUitLijst()">- Verwijder geselecteerde</button>
                             </div>
                             <div id="verplegingContainer" class="verpleging-box">
-                                <!-- Wordt dynamisch gevuld -->
+                                Laden...
                             </div>
                         </div>
 
@@ -351,16 +351,19 @@
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyZFvXqmAU3Dt7ttvk5HmYb8HZHz5JFLUV9tLbT5LLeV4VJcJYhBFAg1Tj3Um43qHOv/exec';
         
-        let verplegersLijst = JSON.parse(localStorage.getItem('dialyse_verplegers')) || ["Jan", "Sophie", "Mark", "Lisa"];
+        let verplegersLijst = [];
 
         window.onload = function() {
-            laadVerplegersCheckboxen();
             laadData();
         };
 
         function laadVerplegersCheckboxen(geselecteerd = []) {
             const container = document.getElementById('verplegingContainer');
             container.innerHTML = '';
+            if (verplegersLijst.length === 0) {
+                container.innerHTML = 'Geen verplegers gevonden in Config.';
+                return;
+            }
             verplegersLijst.forEach(naam => {
                 let isChecked = geselecteerd.includes(naam) ? 'checked' : '';
                 container.innerHTML += `
@@ -371,32 +374,43 @@
             });
         }
 
+        // Nieuwe verpleger toevoegen aan het Config tabblad via Google Script
         function voegVerplegerToe() {
             let input = document.getElementById('nieuweVerplegerNaam');
             let naam = input.value.trim();
             if (naam && !verplegersLijst.includes(naam)) {
-                verplegersLijst.push(naam);
-                localStorage.setItem('dialyse_verplegers', JSON.stringify(verplegersLijst));
-                
-                let geselecteerd = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value);
-                geselecteerd.push(naam);
-                
-                laadVerplegersCheckboxen(geselecteerd);
-                input.value = '';
+                fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'add_verpleger', naam: naam })
+                }).then(() => {
+                    input.value = '';
+                    laadData(); // Ververs data vanuit Google Sheet Config
+                });
             }
         }
 
-        // Functie om aangevinkte verplegers definitief uit de keuzelijst te verwijderen
+        // Verpleger verwijderen uit het Config tabblad via Google Script
         function verwijderVerplegerUitLijst() {
             let teVerwijderen = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value);
             if (teVerwijderen.length === 0) {
-                alert('Vink eerst de naam/namen aan in de lijst die je wilt verwijderen.');
+                alert('Vink eerst de naam/namen aan in de lijst die je wilt verwijderen uit de Config.');
                 return;
             }
-            if (confirm(`Weet je zeker dat je "${teVerwijderen.join(', ')}" wilt verwijderen uit de verplegerslijst?`)) {
-                verplegersLijst = verplegersLijst.filter(naam => !teVerwijderen.includes(naam));
-                localStorage.setItem('dialyse_verplegers', JSON.stringify(verplegersLijst));
-                laadVerplegersCheckboxen();
+            if (confirm(`Weet je zeker dat je "${teVerwijderen.join(', ')}" wilt verwijderen uit de Config?`)) {
+                let promises = teVerwijderen.map(naam => {
+                    return fetch(scriptURL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action: 'delete_verpleger', naam: naam })
+                    });
+                });
+
+                Promise.all(promises).then(() => {
+                    laadData(); // Ververs data vanuit Google Sheet Config
+                });
             }
         }
 
@@ -450,16 +464,28 @@
             }
         }
 
+        // Laad zowel dialysesessies als de verplegerslijst direct vanuit de Google Sheet
         function laadData() {
             fetch(scriptURL)
                 .then(res => res.json())
-                .then(data => {
+                .then(response => {
+                    // Update verplegerslijst uit Config tabblad
+                    if (response.verplegers) {
+                        verplegersLijst = response.verplegers;
+                        let geselecteerd = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value);
+                        laadVerplegersCheckboxen(geselecteerd);
+                    }
+
+                    // Update dialyse tabel
                     const tbody = document.getElementById('tabelBody');
                     tbody.innerHTML = '';
+                    let data = response.dialyse || [];
+
                     if (!Array.isArray(data) || data.length === 0) {
                         tbody.innerHTML = '<tr><td colspan="11">Geen records gevonden.</td></tr>';
                         return;
                     }
+
                     data.reverse().forEach(item => {
                         let tr = document.createElement('tr');
                         
