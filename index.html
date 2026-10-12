@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dialyse Beheersysteem - Windows 11</title>
+    <title>WebOS - Windows 11 Dialyse Beheersysteem</title>
     <!-- jsPDF voor PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
-            --win-bg: #e0e0e0;
-            --win-window-bg: #f9f9f9;
+            --taskbar-height: 48px;
+            --win-bg: #f9f9f9;
             --win-border: #8f8f8f;
             --win-border-light: #d1d1d1;
             --win-blue: #0067c0;
@@ -18,79 +18,103 @@
             --win-text-secondary: #5f5f5f;
         }
 
-        body {
-            font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--win-bg);
-            color: var(--win-text);
+        body, html {
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            transition: all 0.3s ease;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
         }
 
-        .win-window {
-            background: var(--win-window-bg);
-            border: 1px solid var(--win-border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 1250px;
-            border-radius: 8px;
-            overflow: hidden;
+        /* Bureaublad & Iconen */
+        #desktop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: var(--taskbar-height);
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 90px);
+            grid-auto-rows: 90px;
+            gap: 15px;
+            align-content: start;
+        }
+
+        .desktop-icon {
+            position: relative;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
-        }
-
-        /* Klasse voor maximaliseren via het vierkantje */
-        body.maximized {
-            padding: 0;
-        }
-        body.maximized .win-window {
-            max-width: 100vw;
-            height: 100vh;
-            border-radius: 0;
-            border: none;
-        }
-        body.maximized .win-content {
-            max-height: calc(100vh - 90px);
-        }
-
-        /* Klasse voor minimaliseren via het streepje */
-        .win-window.minimized .win-tabs,
-        .win-window.minimized .win-content {
-            display: none;
-        }
-
-        .win-titlebar {
-            background: #ffffff;
-            border-bottom: 1px solid var(--win-border-light);
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 500;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            cursor: pointer;
+            border-radius: 6px;
+            padding: 5px;
             user-select: none;
         }
+        .desktop-icon:hover { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(4px); }
+        .desktop-icon span.icon { font-size: 36px; margin-bottom: 5px; }
+        .desktop-icon span.label { font-size: 12px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
 
-        .win-titlebar-left { display: flex; align-items: center; gap: 8px; }
-        .win-titlebar-buttons { display: flex; gap: 2px; }
-
-        .win-control-btn {
-            width: 38px; height: 30px; border: none; background: transparent; border-radius: 4px;
-            cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; color: var(--win-text);
+        .delete-icon-btn {
+            position: absolute; top: 2px; right: 2px; background: rgba(232, 17, 35, 0.8); color: white;
+            border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; cursor: pointer; display: none; align-items: center; justify-content: center;
         }
-        .win-control-btn:hover { background: rgba(0, 0, 0, 0.06); }
-        .win-control-btn.close:hover { background: #e81123; color: white; }
+        .desktop-icon:hover .delete-icon-btn { display: flex; }
 
-        .win-tabs {
-            display: flex; background: #f3f3f3; border-bottom: 1px solid var(--win-border-light); padding: 0 12px; gap: 4px;
+        /* Slaapmodus (Scherm uit) */
+        #screenSaver {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 99999;
+            display: none; cursor: pointer; justify-content: center; align-items: center; color: #555; font-size: 14px;
         }
 
+        /* Windows 11 Taakbalk */
+        #taskbar {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: var(--taskbar-height);
+            background: rgba(243, 243, 243, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex; justify-content: center; align-items: center; gap: 8px; z-index: 9999;
+        }
+        .taskbar-btn {
+            background: transparent; border: none; border-radius: 6px; width: 40px; height: 40px; font-size: 18px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+        }
+        .taskbar-btn:hover { background: rgba(0, 0, 0, 0.08); }
+
+        /* OS Venster Stijl */
+        .window {
+            position: absolute; top: 40px; left: 60px; width: 90vw; max-width: 1200px; height: 85vh;
+            background: var(--win-bg); border: 1px solid var(--win-border); border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; overflow: hidden; z-index: 10;
+            transition: width 0.15s ease, height 0.15s ease, top 0.15s ease, left 0.15s ease, border-radius 0.15s ease;
+        }
+        .window.minimized { display: none; }
+        .window.maximized {
+            top: 0 !important; left: 0 !important; width: 100% !important; height: calc(100vh - var(--taskbar-height)) !important;
+            border-radius: 0 !important; border: none !important;
+        }
+
+        .window-header {
+            background: #ffffff; padding: 10px 16px; font-size: 13px; font-weight: 600; display: flex;
+            justify-content: space-between; align-items: center; border-bottom: 1px solid var(--win-border-light); cursor: move; user-select: none;
+        }
+        .window-controls { display: flex; gap: 2px; }
+        .window-controls button {
+            background: transparent; border: none; width: 34px; height: 28px; cursor: pointer; border-radius: 4px; font-size: 11px;
+            display: flex; align-items: center; justify-content: center; color: var(--win-text);
+        }
+        .window-controls button:hover { background: rgba(0,0,0,0.06); }
+        .window-controls button.close:hover { background: #e81123; color: white; }
+
+        /* OS App Interne Tabs & UI Stijlen */
+        .win-tabs { display: flex; background: #f3f3f3; border-bottom: 1px solid var(--win-border-light); padding: 0 12px; gap: 4px; }
         .win-tab {
-            padding: 10px 20px; font-size: 13px; font-weight: 500; cursor: pointer; border: none;
-            background: transparent; color: var(--win-text-secondary); border-top-left-radius: 4px; border-top-right-radius: 4px; position: relative;
+            padding: 10px 20px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; background: transparent;
+            color: var(--win-text-secondary); border-top-left-radius: 4px; border-top-right-radius: 4px; position: relative;
         }
         .win-tab:hover { background: rgba(0, 0, 0, 0.04); color: var(--win-text); }
         .win-tab.active { background: var(--win-window-bg); color: var(--win-text); font-weight: 600; }
@@ -98,16 +122,14 @@
             content: ''; position: absolute; bottom: 0; left: 12px; right: 12px; height: 3px; background: var(--win-blue); border-radius: 2px 2px 0 0;
         }
 
-        .win-content { padding: 24px; max-height: 80vh; overflow-y: auto; background: var(--win-window-bg); }
+        .win-content { padding: 24px; flex: 1; overflow-y: auto; background: var(--win-window-bg); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .win-groupbox {
             border: 1px solid var(--win-border-light); border-radius: 6px; padding: 18px; margin-bottom: 20px; background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-        .win-groupbox-title {
-            font-weight: 600; font-size: 14px; color: var(--win-blue); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
-        }
+        .win-groupbox-title { font-weight: 600; font-size: 14px; color: var(--win-blue); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
         .form-group { margin-bottom: 4px; }
@@ -116,19 +138,13 @@
         input, select, textarea {
             width: 100%; padding: 8px 10px; box-sizing: border-box; border: 1px solid var(--win-border); border-radius: 4px; font-family: inherit; font-size: 13px; background: #ffffff;
         }
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--win-blue); outline: none; box-shadow: 0 0 0 2px rgba(0, 103, 192, 0.2);
-        }
+        input:focus, select:focus, textarea:focus { border-color: var(--win-blue); outline: none; box-shadow: 0 0 0 2px rgba(0, 103, 192, 0.2); }
 
-        .checkbox-group {
-            display: flex; gap: 12px; align-items: center; background: #fbfbfb; padding: 8px 10px; border: 1px solid var(--win-border); border-radius: 4px;
-        }
+        .checkbox-group { display: flex; gap: 12px; align-items: center; background: #fbfbfb; padding: 8px 10px; border: 1px solid var(--win-border); border-radius: 4px; flex-wrap: wrap; }
         .checkbox-group label { font-weight: normal; font-size: 12px; margin-bottom: 0; cursor: pointer; color: var(--win-text); display: flex; align-items: center; gap: 4px; }
         .checkbox-group input { width: 16px; height: 16px; accent-color: var(--win-blue); }
 
-        .win-btn {
-            padding: 8px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--win-border); border-radius: 4px; background: #fcfcfc; color: var(--win-text);
-        }
+        .win-btn { padding: 8px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--win-border); border-radius: 4px; background: #fcfcfc; color: var(--win-text); }
         .win-btn:hover { background: #f2f2f2; border-color: #707070; }
         .win-btn-primary { background: var(--win-blue); color: white; border-color: var(--win-blue-hover); }
         .win-btn-primary:hover { background: var(--win-blue-hover); color: white; }
@@ -139,9 +155,7 @@
         .win-btn-pdf { background: #eef6f0; color: #107c41; border-color: #b3e0c0; }
         .win-btn-pdf:hover { background: #107c41; color: white; }
 
-        table {
-            width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; background: white; border: 1px solid var(--win-border-light); border-radius: 4px; overflow: hidden;
-        }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; background: white; border: 1px solid var(--win-border-light); border-radius: 4px; overflow: hidden; }
         th, td { border-bottom: 1px solid var(--win-border-light); padding: 10px 12px; text-align: left; }
         th { background-color: #f3f3f3; font-weight: 600; color: var(--win-text); }
         tr:hover { background-color: rgba(0, 0, 0, 0.02); }
@@ -152,23 +166,41 @@
 
         .status-bar { margin-top: 12px; font-weight: 600; font-size: 13px; }
         .verpleging-box { background: #ffffff; border: 1px solid var(--win-border); border-radius: 4px; padding: 8px; max-height: 120px; overflow-y: auto; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
-    <div class="win-window" id="mainWindow">
-        <div class="win-titlebar">
-            <div class="win-titlebar-left">
-                <span>🏥</span>
-                <span>Dialyse Beheersysteem - Windows 11</span>
-            </div>
-            <div class="win-titlebar-buttons">
-                <button class="win-control-btn" title="Minimaliseren" onclick="minimaliseerVenster()">🗕</button>
-                <button class="win-control-btn" id="maximizeBtn" title="Optimaliseren / Maximaliseren" onclick="maximaliseerVenster()">🗖</button>
-                <button class="win-control-btn close" title="Sluiten" onclick="sluitVenster()">✕</button>
-            </div>
-        </div>
+    <!-- Slaapmodus (Scherm uit) -->
+    <div id="screenSaver" onclick="zetSchermAan()">
+        Scherm is uitgeschakeld. Klik ergens om het scherm weer in te schakelen.
+    </div>
 
+    <!-- Bureaublad met Icoon -->
+    <div id="desktop">
+        <div class="desktop-icon" onclick="openDialyseApp()">
+            <span class="icon">🏥</span>
+            <span class="label">Dialyse Systeem</span>
+        </div>
+        <div class="desktop-icon" onclick="vraagNieuweApp()">
+            <span class="icon">➕</span>
+            <span class="label">App Toevoegen</span>
+        </div>
+    </div>
+
+    <!-- Container voor actieve OS-vensters -->
+    <div id="windowContainer"></div>
+
+    <!-- Windows 11 Taakbalk -->
+    <div id="taskbar">
+        <button class="taskbar-btn" title="Startmenu">🪟</button>
+        <div id="taskbarApps" style="display: flex; gap: 4px;"></div>
+        <button class="taskbar-btn" title="Scherm uitschakelen" onclick="zetSchermUit()">🌙</button>
+        <button class="taskbar-btn" id="fullscreenBtn" title="Volledig scherm inschakelen" onclick="toggleFullscreen()">⛶</button>
+    </div>
+
+    <!-- HET DIALYSE SYSTEEM ALS INGEBOUWDE OS-APP -->
+    <template id="dialyseAppTemplate">
         <div class="win-tabs">
             <button class="win-tab active" onclick="schakelTab('invoer', this)">Invoer & Sessie</button>
             <button class="win-tab" onclick="schakelTab('planning', this)">📅 Planning Generator</button>
@@ -177,7 +209,6 @@
         </div>
 
         <div class="win-content">
-
             <!-- TAB 1: INVOER & SESSIE -->
             <div id="tab-invoer" class="tab-content active">
                 <div class="win-groupbox">
@@ -322,7 +353,7 @@
                     <form id="planningForm" onsubmit="genereerPlanning(event)">
                         <div class="grid">
                             <div class="form-group">
-                                <label>Basis ID Prefix (Automatisch / Aanpasbaar):</label>
+                                <label>Basis ID Prefix:</label>
                                 <input type="text" id="planID" required>
                             </div>
                             <div class="form-group">
@@ -415,59 +446,228 @@
                     </div>
                 </div>
             </div>
-
         </div>
-    </div>
+    </template>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyySe2KuPpJ6SXZTT3F6E0RCtAbLFlz_ygXDbboKfwXI1g9QdqfauPGBiTOvz2xj_GA/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxII2ZYEskpjHVjN1Pr5FafsOszbKOovIOx2KOH0HahBbaD5b3-bQpr8fZhFSP85k-D/exec';
         let verplegersLijst = [];
 
-        window.onload = function() { 
-            laadData(); 
-            zetAutomatischPlanID();
-            laadStandaardDroogGewicht();
+        window.onload = function() {
+            laadOpgeslagenApps();
         };
 
-        // Venster acties voor de Windows 11 knoppen
-        function minimaliseerVenster() {
-            let win = document.getElementById('mainWindow');
-            win.classList.toggle('minimized');
+        // Slaapmodus
+        function zetSchermUit() { document.getElementById('screenSaver').style.display = 'flex'; }
+        function zetSchermAan() { document.getElementById('screenSaver').style.display = 'none'; }
+
+        // OS Vensters Beheer
+        function openDialyseApp() {
+            let appId = 'dialyseApp';
+            let existingWindow = document.getElementById('win-' + appId);
+            if (existingWindow) {
+                existingWindow.style.display = 'flex';
+                brengNaarVoorgrond(appId);
+                return;
+            }
+
+            let win = document.createElement('div');
+            win.className = 'window';
+            win.id = 'win-' + appId;
+            
+            let template = document.getElementById('dialyseAppTemplate').innerHTML;
+            win.innerHTML = `
+                <div class="window-header" onmousedown="brengNaarVoorgrond('${appId}')">
+                    <span>🏥 Dialyse Beheersysteem</span>
+                    <div class="window-controls">
+                        <button onclick="minimizeApp('${appId}')" title="Minimaliseren">🗕</button>
+                        <button id="maxBtn-${appId}" onclick="maximizeApp('${appId}')" title="Maximaliseren">🗖</button>
+                        <button onclick="closeApp('${appId}')" class="close" title="Sluiten">✕</button>
+                    </div>
+                </div>
+                ${template}
+            `;
+
+            document.getElementById('windowContainer').appendChild(win);
+            voegTaakbalkIcoonToe(appId, 'Dialyse Systeem', '🏥');
+            brengNaarVoorgrond(appId);
+
+            // Initialiseer functionaliteit in het ingeladen template
+            laadData();
+            zetAutomatischPlanID();
+            laadStandaardDroogGewicht();
+
+            // Formulier submit event koppelen
+            setTimeout(() => {
+                let formEl = document.getElementById('dialyseForm');
+                if (formEl) {
+                    formEl.addEventListener('submit', handleFormSubmit);
+                }
+            }, 100);
         }
 
-        function maximaliseerVenster() {
-            let body = document.body;
-            let btn = document.getElementById('maximizeBtn');
-            body.classList.toggle('maximized');
-            if (body.classList.contains('maximized')) {
-                btn.textContent = '❐';
-                btn.title = 'Herstellen';
+        function openCustomApp(appId, title, icon, url) {
+            let existingWindow = document.getElementById('win-' + appId);
+            if (existingWindow) {
+                existingWindow.style.display = 'flex';
+                brengNaarVoorgrond(appId);
+                return;
+            }
+
+            let win = document.createElement('div');
+            win.className = 'window';
+            win.id = 'win-' + appId;
+
+            win.innerHTML = `
+                <div class="window-header" onmousedown="brengNaarVoorgrond('${appId}')">
+                    <span>${icon} ${title}</span>
+                    <div class="window-controls">
+                        <button onclick="minimizeApp('${appId}')" title="Minimaliseren">🗕</button>
+                        <button id="maxBtn-${appId}" onclick="maximizeApp('${appId}')" title="Maximaliseren">🗖</button>
+                        <button onclick="closeApp('${appId}')" class="close" title="Sluiten">✕</button>
+                    </div>
+                </div>
+                <div class="window-body" style="flex:1; display:flex; flex-direction:column;">
+                    <iframe src="${url}"></iframe>
+                </div>
+            `;
+
+            document.getElementById('windowContainer').appendChild(win);
+            voegTaakbalkIcoonToe(appId, title, icon);
+            brengNaarVoorgrond(appId);
+        }
+
+        function maximizeApp(appId) {
+            let win = document.getElementById('win-' + appId);
+            let btn = document.getElementById('maxBtn-' + appId);
+            if (win) {
+                win.classList.toggle('maximized');
+                if (win.classList.contains('maximized')) {
+                    btn.textContent = '❐';
+                    btn.title = 'Herstellen';
+                } else {
+                    btn.textContent = '🗖';
+                    btn.title = 'Maximaliseren';
+                }
+            }
+        }
+
+        function brengNaarVoorgrond(appId) {
+            let win = document.getElementById('win-' + appId);
+            if (win) {
+                document.querySelectorAll('.window').forEach(w => w.style.zIndex = '10');
+                win.style.zIndex = '100';
+            }
+        }
+
+        function closeApp(appId) {
+            let win = document.getElementById('win-' + appId);
+            if (win) win.remove();
+            let tbBtn = document.getElementById('tb-' + appId);
+            if (tbBtn) tbBtn.remove();
+        }
+
+        function minimizeApp(appId) {
+            let win = document.getElementById('win-' + appId);
+            if (win) {
+                win.style.display = win.style.display === 'none' ? 'flex' : 'none';
+            }
+        }
+
+        function voegTaakbalkIcoonToe(appId, title, icon) {
+            if (document.getElementById('tb-' + appId)) return;
+            let taskbarApps = document.getElementById('taskbarApps');
+            let btn = document.createElement('button');
+            btn.className = 'taskbar-btn';
+            btn.id = 'tb-' + appId;
+            btn.title = title;
+            btn.innerHTML = icon;
+            btn.onclick = () => {
+                minimizeApp(appId);
+                brengNaarVoorgrond(appId);
+            };
+            taskbarApps.appendChild(btn);
+        }
+
+        function toggleFullscreen() {
+            let btn = document.getElementById('fullscreenBtn');
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                let docEl = document.documentElement;
+                if (docEl.requestFullscreen) docEl.requestFullscreen();
+                else if (docEl.webkitRequestFullscreen) docEl.webkitRequestFullscreen();
             } else {
-                btn.textContent = '🗖';
-                btn.title = 'Optimaliseren / Maximaliseren';
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
             }
         }
 
-        function sluitVenster() {
-            if (confirm('Wil je dit dialyse-systeem sluiten of verbergen?')) {
-                window.close();
-                // Als debrowser window.close() blokkeert, tonen we een melding
-                setTimeout(() => {
-                    alert('Systeem is vergrendeld. Vernieuw de pagina om opnieuw te starten.');
-                }, 100);
+        // Bureaublad App Toevoegen / Verwijderen
+        function vraagNieuweApp() {
+            let naam = prompt("Geef een naam op voor de app:");
+            if (!naam) return;
+            let icoon = prompt("Geef een emoji als icoon op (bijv. 📊, 📁, 🌐):", "🔗");
+            if (!icoon) icoon = "🔗";
+            let url = prompt("Geef de webkoppeling (URL) op die in de app moet openen:", "https://");
+            if (!url) return;
+
+            let appId = 'app_' + Date.now();
+            let nieuweApp = { id: appId, name: naam, icon: icoon, url: url };
+
+            let opgeslagen = JSON.parse(localStorage.getItem('user_apps') || '[]');
+            opgeslagen.push(nieuweApp);
+            localStorage.setItem('user_apps', JSON.stringify(opgeslagen));
+
+            tekenDesktopIcon(nieuweApp, true);
+        }
+
+        function laadOpgeslagenApps() {
+            let opgeslagen = JSON.parse(localStorage.getItem('user_apps') || '[]');
+            opgeslagen.forEach(app => {
+                tekenDesktopIcon(app, true);
+            });
+        }
+
+        function tekenDesktopIcon(app, isCustom = false) {
+            let desktop = document.getElementById('desktop');
+            let div = document.createElement('div');
+            div.className = 'desktop-icon';
+            div.id = 'icon-' + app.id;
+            
+            let deleteBtnHtml = isCustom ? `<button class="delete-icon-btn" onclick="event.stopPropagation(); verwijderApp('${app.id}')" title="App verwijderen">✕</button>` : '';
+
+            div.innerHTML = `
+                ${deleteBtnHtml}
+                <span class="icon">${app.icon}</span>
+                <span class="label">${app.name}</span>
+            `;
+            div.onclick = () => openCustomApp(app.id, app.name, app.icon, app.url);
+            
+            desktop.insertBefore(div, desktop.lastElementChild);
+        }
+
+        function verwijderApp(appId) {
+            if (confirm('Weet je zeker dat je deze app wilt verwijderen van het bureaublad?')) {
+                let opgeslagen = JSON.parse(localStorage.getItem('user_apps') || '[]');
+                opgeslagen = opgeslagen.filter(app => app.id !== appId);
+                localStorage.setItem('user_apps', JSON.stringify(opgeslagen));
+
+                let iconEl = document.getElementById('icon-' + appId);
+                if (iconEl) iconEl.remove();
+
+                closeApp(appId);
             }
         }
 
+        // --- DIALYSE APPLICATIE LOGICA ---
         function laadStandaardDroogGewicht() {
             let opgeslagenGewicht = localStorage.getItem('standaard_droog_gewicht') || '109.0';
-            document.getElementById('Droog gewicht').value = opgeslagenGewicht;
+            let el = document.getElementById('Droog gewicht');
+            if(el) el.value = opgeslagenGewicht;
         }
 
         function slaStandaardDroogGewichtOp() {
             let val = document.getElementById('Droog gewicht').value;
-            if (val) {
-                localStorage.setItem('standaard_droog_gewicht', val);
-            }
+            if (val) { localStorage.setItem('standaard_droog_gewicht', val); }
         }
 
         function schakelTab(tabNaam, btnEl) {
@@ -477,9 +677,7 @@
                 let targetTab = document.getElementById('tab-' + tabNaam);
                 if (targetTab) targetTab.classList.add('active');
                 if (btnEl) btnEl.classList.add('active');
-            } catch(e) {
-                console.error("Fout bij tab wisselen:", e);
-            }
+            } catch(e) { console.error("Fout bij tab wisselen:", e); }
         }
 
         function zetAutomatischPlanID() {
@@ -587,9 +785,7 @@
             let werkelijkeUfField = document.getElementById('Werkelijke uf');
             if (!isNaN(pre) && !isNaN(post) && werkelijkeUfField) {
                 werkelijkeUfField.value = (post - pre).toFixed(2);
-            } else if (werkelijkeUfField) { 
-                werkelijkeUfField.value = ''; 
-            }
+            } else if (werkelijkeUfField) { werkelijkeUfField.value = ''; }
         }
 
         function genereerPlanning(e) {
@@ -747,69 +943,64 @@
                         }
                     }
                 })
-                .catch(err => {
-                    console.error("Fout bij laden van data:", err);
-                });
+                .catch(err => { console.error("Fout bij laden van data:", err); });
         }
 
-        let formEl = document.getElementById('dialyseForm');
-        if (formEl) {
-            formEl.addEventListener('submit', e => {
-                e.preventDefault();
-                const status = document.getElementById('status');
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const status = document.getElementById('status');
+            if (status) {
+                status.style.color = 'black';
+                status.textContent = 'Bezig met opslaan...';
+            }
+
+            let idVal = document.getElementById('ID').value.trim();
+            if (!idVal) {
+                let now = new Date();
+                idVal = "DIAL-" + now.toISOString().slice(0,10).replace(/-/g,'');
+            }
+
+            let f2500Values = Array.from(document.querySelectorAll('input[name="f2500"]:checked')).map(cb => cb.value).join(', ');
+            let f5000Values = Array.from(document.querySelectorAll('input[name="f5000"]:checked')).map(cb => cb.value).join(', ');
+            let verplegingValues = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value).join(', ');
+
+            const payload = {
+                rowIndex: document.getElementById('rowIndex').value || '',
+                "ID": idVal,
+                "Dag/Nacht": document.getElementById('Dag/Nacht').value,
+                "Planning": document.getElementById('Planning').value,
+                "Afspraakdatumtijd": document.getElementById('Afspraakdatumtijd').value,
+                "Aansluitdatumtijd": document.getElementById('Aansluitdatumtijd').value,
+                "Afsluitdatumtijd": document.getElementById('Afsluitdatumtijd').value,
+                "Totaaltijd": document.getElementById('Totaaltijd').value,
+                "Pre gewicht": document.getElementById('Pre gewicht').value,
+                "Post gewicht": document.getElementById('Post gewicht').value,
+                "Droog gewicht": document.getElementById('Droog gewicht').value || '109.0',
+                "UF advies": document.getElementById('UF advies').value,
+                "UF ingesteld": document.getElementById('UF ingesteld').value,
+                "Werkelijke uf": document.getElementById('Werkelijke uf').value,
+                "Fragmin 2500": f2500Values,
+                "Fragmin 5000": f5000Values,
+                "Epo": document.getElementById('Epo').checked ? "Ja" : "Nee",
+                "Ijzer": document.getElementById('Ijzer').checked ? "Ja" : "Nee",
+                "Shuntflow": document.getElementById('Shuntflow').checked ? "Ja" : "Nee",
+                "Resultaat shuntflow": document.getElementById('Resultaat shuntflow').value,
+                "Verpleging": verplegingValues,
+                "Notities dialyse": document.getElementById('Notities dialyse').value,
+                "Bijzonderheden patiënt": document.getElementById('Bijzonderheden patiënt').value
+            };
+
+            fetch(scriptURL, {
+                method: 'POST', mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            }).then(() => {
                 if (status) {
-                    status.style.color = 'black';
-                    status.textContent = 'Bezig met opslaan...';
+                    status.style.color = '#107c41';
+                    status.textContent = 'Gegevens succesvol opgeslagen!';
                 }
-
-                let idVal = document.getElementById('ID').value.trim();
-                if (!idVal) {
-                    let now = new Date();
-                    idVal = "DIAL-" + now.toISOString().slice(0,10).replace(/-/g,'');
-                }
-
-                let f2500Values = Array.from(document.querySelectorAll('input[name="f2500"]:checked')).map(cb => cb.value).join(', ');
-                let f5000Values = Array.from(document.querySelectorAll('input[name="f5000"]:checked')).map(cb => cb.value).join(', ');
-                let verplegingValues = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value).join(', ');
-
-                const payload = {
-                    rowIndex: document.getElementById('rowIndex').value || '',
-                    "ID": idVal,
-                    "Dag/Nacht": document.getElementById('Dag/Nacht').value,
-                    "Planning": document.getElementById('Planning').value,
-                    "Afspraakdatumtijd": document.getElementById('Afspraakdatumtijd').value,
-                    "Aansluitdatumtijd": document.getElementById('Aansluitdatumtijd').value,
-                    "Afsluitdatumtijd": document.getElementById('Afsluitdatumtijd').value,
-                    "Totaaltijd": document.getElementById('Totaaltijd').value,
-                    "Pre gewicht": document.getElementById('Pre gewicht').value,
-                    "Post gewicht": document.getElementById('Post gewicht').value,
-                    "Droog gewicht": document.getElementById('Droog gewicht').value || '109.0',
-                    "UF advies": document.getElementById('UF advies').value,
-                    "UF ingesteld": document.getElementById('UF ingesteld').value,
-                    "Werkelijke uf": document.getElementById('Werkelijke uf').value,
-                    "Fragmin 2500": f2500Values,
-                    "Fragmin 5000": f5000Values,
-                    "Epo": document.getElementById('Epo').checked ? "Ja" : "Nee",
-                    "Ijzer": document.getElementById('Ijzer').checked ? "Ja" : "Nee",
-                    "Shuntflow": document.getElementById('Shuntflow').checked ? "Ja" : "Nee",
-                    "Resultaat shuntflow": document.getElementById('Resultaat shuntflow').value,
-                    "Verpleging": verplegingValues,
-                    "Notities dialyse": document.getElementById('Notities dialyse').value,
-                    "Bijzonderheden patiënt": document.getElementById('Bijzonderheden patiënt').value
-                };
-
-                fetch(scriptURL, {
-                    method: 'POST', mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
-                }).then(() => {
-                    if (status) {
-                        status.style.color = '#107c41';
-                        status.textContent = 'Gegevens succesvol opgeslagen!';
-                    }
-                    resetForm();
-                    setTimeout(() => { if (status) status.textContent = ''; laadData(); }, 1500);
-                });
+                resetForm();
+                setTimeout(() => { if (status) status.textContent = ''; laadData(); }, 1500);
             });
         }
 
@@ -848,7 +1039,6 @@
             if (submitBtn) submitBtn.textContent = 'Bijwerken';
             
             schakelTab('invoer', document.querySelectorAll('.win-tab')[0]);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function verwijderItem(rowIndex) {
@@ -903,15 +1093,20 @@
         function resetForm() {
             let form = document.getElementById('dialyseForm');
             if (form) form.reset();
-            document.getElementById('rowIndex').value = '';
-            document.getElementById('Planning').value = 'Geen';
+            let rowIdx = document.getElementById('rowIndex');
+            if (rowIdx) rowIdx.value = '';
+            let planning = document.getElementById('Planning');
+            if (planning) planning.value = 'Geen';
             
             laadStandaardDroogGewicht();
 
-            document.getElementById('UF advies').value = '';
-            document.getElementById('UF advies').className = '';
-            document.getElementById('Werkelijke uf').value = '';
-            document.getElementById('Totaaltijd').value = '';
+            let ufAdvies = document.getElementById('UF advies');
+            if (ufAdvies) { ufAdvies.value = ''; ufAdvies.className = ''; }
+            let werkUf = document.getElementById('Werkelijke uf');
+            if (werkUf) werkUf.value = '';
+            let totTijd = document.getElementById('Totaaltijd');
+            if (totTijd) totTijd.value = '';
+            
             laadVerplegersCheckboxen(verplegersLijst.filter(n => false));
             let formTitle = document.getElementById('formTitle');
             if (formTitle) formTitle.textContent = 'Nieuwe Dialyse Sessie Toevoegen';
