@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -659,6 +660,18 @@
         }
 
         // --- DIALYSE APPLICATIE LOGICA ---
+        function formatteerDatumTijd(isoString) {
+            if (!isoString) return '';
+            let cleanStr = isoString.toString().replace('.000Z', '').replace('Z', '');
+            if (cleanStr.includes('T')) {
+                let delen = cleanStr.split('T');
+                let datumDeel = delen[0];
+                let tijdDeel = delen[1].substring(0, 5); // Toon exact HH:mm zonder .000Z verschuivingen
+                return datumDeel + ' ' + tijdDeel;
+            }
+            return cleanStr;
+        }
+
         function laadStandaardDroogGewicht() {
             let opgeslagenGewicht = localStorage.getItem('standaard_droog_gewicht') || '109.0';
             let el = document.getElementById('Droog gewicht');
@@ -897,7 +910,7 @@
                                     <td>${item['ID'] || ''}</td>
                                     <td>${item['Dag/Nacht'] || ''}</td>
                                     <td><b>${item['Planning'] || 'Geen'}</b></td>
-                                    <td>${item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : ''}</td>
+                                    <td>${item['Aansluitdatumtijd'] ? formatteerDatumTijd(item['Aansluitdatumtijd']) : ''}</td>
                                     <td>${item['Totaaltijd'] || ''}</td>
                                     <td>${item['Pre gewicht'] || ''}</td>
                                     <td>${item['Post gewicht'] || ''}</td>
@@ -928,8 +941,8 @@
                                 gTr.innerHTML = `
                                     <td>${gItem['ID'] || ''}</td>
                                     <td>${gItem['Dag/Nacht'] || ''}</td>
-                                    <td>${gItem['Aansluitdatumtijd'] ? gItem['Aansluitdatumtijd'].replace('T', ' ') : ''}</td>
-                                    <td>${gItem['Afsluitdatumtijd'] ? gItem['Afsluitdatumtijd'].replace('T', ' ') : ''}</td>
+                                    <td>${gItem['Aansluitdatumtijd'] ? formatteerDatumTijd(gItem['Aansluitdatumtijd']) : ''}</td>
+                                    <td>${gItem['Afsluitdatumtijd'] ? formatteerDatumTijd(gItem['Afsluitdatumtijd']) : ''}</td>
                                     <td>${gItem['Pre gewicht'] || ''}</td>
                                     <td>${gItem['Post gewicht'] || ''}</td>
                                     <td>${gItem['Werkelijke uf'] || ''}</td>
@@ -1075,8 +1088,8 @@
 
             addRow("Type Behandeling:", item['Dag/Nacht']);
             addRow("Planning / Schema:", item['Planning']);
-            addRow("Aansluit Datum/Tijd:", item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : '-');
-            addRow("Afsluit Datum/Tijd:", item['Afsluitdatumtijd'] ? item['Afsluitdatumtijd'].replace('T', ' ') : '-');
+            addRow("Aansluit Datum/Tijd:", item['Aansluitdatumtijd'] ? formatteerDatumTijd(item['Aansluitdatumtijd']) : '-');
+            addRow("Afsluit Datum/Tijd:", item['Afsluitdatumtijd'] ? formatteerDatumTijd(item['Afsluitdatumtijd']) : '-');
             addRow("Totale Tijd:", item['Totaaltijd']);
             y += 5; doc.setLineWidth(0.5); doc.line(15, y, 195, y); y += 10;
             addRow("Pre Gewicht:", (item['Pre gewicht'] || '-') + " kg");
