@@ -249,7 +249,7 @@
         <div class="win-titlebar">
             <div class="win-titlebar-left">
                 <span>🏥</span>
-                <span>Dialyse Beheersysteem - Windows 11 Planning Edition</span>
+                <span>Dialyse Beheersysteem - Planning & Invoer</span>
             </div>
             <div class="win-titlebar-buttons">
                 <button class="win-control-btn" title="Minimaliseren">🗕</button>
@@ -274,7 +274,7 @@
                         <input type="hidden" id="rowIndex">
                         <div class="grid">
                             <div class="form-group">
-                                <label>ID (Automatisch / Aanpasbaar):</label>
+                                <label>ID (Automatisch meegenomen):</label>
                                 <input type="text" id="ID" placeholder="Wordt automatisch gegenereerd">
                             </div>
                             <div class="form-group">
@@ -410,8 +410,8 @@
                     <form id="planningForm" onsubmit="genereerPlanning(event)">
                         <div class="grid">
                             <div class="form-group">
-                                <label>Basis ID (Prefix):</label>
-                                <input type="text" id="planID" placeholder="Bijv. PLAN-01" required>
+                                <label>Basis ID (Automatisch gegenereerd / Aanpasbaar):</label>
+                                <input type="text" id="planID" required>
                             </div>
                             <div class="form-group">
                                 <label>Dag / Nacht:</label>
@@ -421,7 +421,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Start Aansluitdatum & Tijd:</label>
+                                <label>Aansluitdatum & Tijd:</label>
                                 <input type="datetime-local" id="planStartDatum" required>
                             </div>
                             <div class="form-group">
@@ -484,7 +484,16 @@
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyZFvXqmAU3Dt7ttvk5HmYb8HZHz5JFLUV9tLbT5LLeV4VJcJYhBFAg1Tj3Um43qHOv/exec';
         let verplegersLijst = [];
 
-        window.onload = function() { laadData(); };
+        window.onload = function() { 
+            laadData(); 
+            zetAutomatischPlanID();
+        };
+
+        function zetAutomatischPlanID() {
+            let now = new Date();
+            let autoId = "PLAN-" + now.toISOString().slice(0,10).replace(/-/g,'') + "-" + now.toTimeString().slice(0,5).replace(':','');
+            document.getElementById('planID').value = autoId;
+        }
 
         function schakelTab(tabNaam, btnEl) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -571,7 +580,6 @@
             } else { document.getElementById('Werkelijke uf').value = ''; }
         }
 
-        // Automatisch afspraken genereren vanuit Planning tab
         function genereerPlanning(e) {
             e.preventDefault();
             const status = document.getElementById('planStatus');
@@ -591,7 +599,7 @@
             let counter = 1;
 
             while (currDate <= endDate) {
-                let dayOfWeek = currDate.getDay(); // 0=Zo, 1=Ma, 2=Di, 3=Wo, 4=Do, 5=Vrij, 6=Za
+                let dayOfWeek = currDate.getDay(); 
                 let magInplanning = false;
 
                 if (schema === 'Elke dag') {
@@ -635,6 +643,7 @@
             }).then(() => {
                 status.style.color = '#107c41';
                 status.textContent = `Succeselijk ${rowsToInsert.length} afspraken uitgeschreven naar het Overzicht!`;
+                zetAutomatischPlanID(); // Maak direct een nieuw basis ID aan voor de volgende planning
                 setTimeout(() => {
                     status.textContent = '';
                     schakelTab('overzicht', document.querySelectorAll('.win-tab')[2]);
