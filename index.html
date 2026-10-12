@@ -52,164 +52,61 @@
             user-select: none;
         }
 
-        .win-titlebar-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .win-titlebar-buttons {
-            display: flex;
-            gap: 4px;
-        }
+        .win-titlebar-left { display: flex; align-items: center; gap: 8px; }
+        .win-titlebar-buttons { display: flex; gap: 4px; }
 
         .win-control-btn {
-            width: 32px;
-            height: 28px;
-            border: none;
-            background: transparent;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--win-text);
+            width: 32px; height: 28px; border: none; background: transparent; border-radius: 4px;
+            cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; color: var(--win-text);
         }
-
         .win-control-btn:hover { background: rgba(0, 0, 0, 0.06); }
         .win-control-btn.close:hover { background: #e81123; color: white; }
 
         .win-tabs {
-            display: flex;
-            background: #f3f3f3;
-            border-bottom: 1px solid var(--win-border-light);
-            padding: 0 12px;
-            gap: 4px;
+            display: flex; background: #f3f3f3; border-bottom: 1px solid var(--win-border-light); padding: 0 12px; gap: 4px;
         }
 
         .win-tab {
-            padding: 10px 20px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            color: var(--win-text-secondary);
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-            position: relative;
+            padding: 10px 20px; font-size: 13px; font-weight: 500; cursor: pointer; border: none;
+            background: transparent; color: var(--win-text-secondary); border-top-left-radius: 4px; border-top-right-radius: 4px; position: relative;
         }
-
         .win-tab:hover { background: rgba(0, 0, 0, 0.04); color: var(--win-text); }
         .win-tab.active { background: var(--win-window-bg); color: var(--win-text); font-weight: 600; }
         .win-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 12px;
-            right: 12px;
-            height: 3px;
-            background: var(--win-blue);
-            border-radius: 2px 2px 0 0;
+            content: ''; position: absolute; bottom: 0; left: 12px; right: 12px; height: 3px; background: var(--win-blue); border-radius: 2px 2px 0 0;
         }
 
-        .win-content {
-            padding: 24px;
-            max-height: 80vh;
-            overflow-y: auto;
-            background: var(--win-window-bg);
-        }
-
+        .win-content { padding: 24px; max-height: 80vh; overflow-y: auto; background: var(--win-window-bg); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .win-groupbox {
-            border: 1px solid var(--win-border-light);
-            border-radius: 6px;
-            padding: 18px;
-            margin-bottom: 20px;
-            background: #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid var(--win-border-light); border-radius: 6px; padding: 18px; margin-bottom: 20px; background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-
         .win-groupbox-title {
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--win-blue);
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-weight: 600; font-size: 14px; color: var(--win-blue); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 14px;
-        }
-
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
         .form-group { margin-bottom: 4px; }
 
-        label {
-            display: block;
-            margin-bottom: 4px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--win-text-secondary);
-        }
-
+        label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: 500; color: var(--win-text-secondary); }
         input, select, textarea {
-            width: 100%;
-            padding: 8px 10px;
-            box-sizing: border-box;
-            border: 1px solid var(--win-border);
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 13px;
-            background: #ffffff;
+            width: 100%; padding: 8px 10px; box-sizing: border-box; border: 1px solid var(--win-border); border-radius: 4px; font-family: inherit; font-size: 13px; background: #ffffff;
         }
-
         input:focus, select:focus, textarea:focus {
-            border-color: var(--win-blue);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(0, 103, 192, 0.2);
+            border-color: var(--win-blue); outline: none; box-shadow: 0 0 0 2px rgba(0, 103, 192, 0.2);
         }
 
         .checkbox-group {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            background: #fbfbfb;
-            padding: 8px 10px;
-            border: 1px solid var(--win-border);
-            border-radius: 4px;
+            display: flex; gap: 12px; align-items: center; background: #fbfbfb; padding: 8px 10px; border: 1px solid var(--win-border); border-radius: 4px;
         }
-
-        .checkbox-group label {
-            font-weight: normal;
-            font-size: 12px;
-            margin-bottom: 0;
-            cursor: pointer;
-            color: var(--win-text);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
+        .checkbox-group label { font-weight: normal; font-size: 12px; margin-bottom: 0; cursor: pointer; color: var(--win-text); display: flex; align-items: center; gap: 4px; }
         .checkbox-group input { width: 16px; height: 16px; accent-color: var(--win-blue); }
 
         .win-btn {
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            border: 1px solid var(--win-border);
-            border-radius: 4px;
-            background: #fcfcfc;
-            color: var(--win-text);
+            padding: 8px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--win-border); border-radius: 4px; background: #fcfcfc; color: var(--win-text);
         }
-
         .win-btn:hover { background: #f2f2f2; border-color: #707070; }
         .win-btn-primary { background: var(--win-blue); color: white; border-color: var(--win-blue-hover); }
         .win-btn-primary:hover { background: var(--win-blue-hover); color: white; }
@@ -221,16 +118,8 @@
         .win-btn-pdf:hover { background: #107c41; color: white; }
 
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 12px;
-            background: white;
-            border: 1px solid var(--win-border-light);
-            border-radius: 4px;
-            overflow: hidden;
+            width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; background: white; border: 1px solid var(--win-border-light); border-radius: 4px; overflow: hidden;
         }
-
         th, td { border-bottom: 1px solid var(--win-border-light); padding: 10px 12px; text-align: left; }
         th { background-color: #f3f3f3; font-weight: 600; color: var(--win-text); }
         tr:hover { background-color: rgba(0, 0, 0, 0.02); }
@@ -249,7 +138,7 @@
         <div class="win-titlebar">
             <div class="win-titlebar-left">
                 <span>🏥</span>
-                <span>Dialyse Beheersysteem - Planning & Invoer</span>
+                <span>Dialyse Beheersysteem - Planning & Overzicht</span>
             </div>
             <div class="win-titlebar-buttons">
                 <button class="win-control-btn" title="Minimaliseren">🗕</button>
@@ -261,7 +150,8 @@
         <div class="win-tabs">
             <button class="win-tab active" onclick="schakelTab('invoer', this)">Invoer & Sessie</button>
             <button class="win-tab" onclick="schakelTab('planning', this)">📅 Planning Generator</button>
-            <button class="win-tab" onclick="schakelTab('overzicht', this)">Overzicht & Rapportage</button>
+            <button class="win-tab" onclick="schakelTab('overzicht', this)">Overzicht (Vandaag bovenaan)</button>
+            <button class="win-tab" onclick="schakelTab('gereed', this)">✅ Gereed</button>
         </div>
 
         <div class="win-content">
@@ -274,7 +164,7 @@
                         <input type="hidden" id="rowIndex">
                         <div class="grid">
                             <div class="form-group">
-                                <label>ID (Automatisch meegenomen):</label>
+                                <label>ID (Automatisch op basis van Aansluitdatum):</label>
                                 <input type="text" id="ID" placeholder="Wordt automatisch gegenereerd">
                             </div>
                             <div class="form-group">
@@ -299,8 +189,8 @@
                                 <input type="datetime-local" id="Afspraakdatumtijd">
                             </div>
                             <div class="form-group">
-                                <label>Aansluitdatumtijd:</label>
-                                <input type="datetime-local" id="Aansluitdatumtijd" oninput="berekenTotaalTijd()">
+                                <label>Aansluitdatumtijd (Bepaalt ID):</label>
+                                <input type="datetime-local" id="Aansluitdatumtijd" oninput="genereerIdOpBasisVanAansluiting(); berekenTotaalTijd();">
                             </div>
                             <div class="form-group">
                                 <label>Afsluitdatumtijd:</label>
@@ -410,7 +300,7 @@
                     <form id="planningForm" onsubmit="genereerPlanning(event)">
                         <div class="grid">
                             <div class="form-group">
-                                <label>Basis ID (Automatisch gegenereerd / Aanpasbaar):</label>
+                                <label>Basis ID Prefix (Automatisch / Aanpasbaar):</label>
                                 <input type="text" id="planID" required>
                             </div>
                             <div class="form-group">
@@ -421,8 +311,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Aansluitdatum & Tijd:</label>
-                                <input type="datetime-local" id="planStartDatum" required>
+                                <label>Start Aansluitdatum & Tijd:</label>
+                                <input type="datetime-local" id="planStartDatum" required oninput="updatePlanIdPrefix(this.value)">
                             </div>
                             <div class="form-group">
                                 <label>Schema Herhaling:</label>
@@ -449,7 +339,7 @@
             <!-- TAB 3: OVERZICHT -->
             <div id="tab-overzicht" class="tab-content">
                 <div class="win-groupbox">
-                    <div class="win-groupbox-title">Overzicht Alle Sessies</div>
+                    <div class="win-groupbox-title">Overzicht Actieve Sessies (Vandaag bovenaan)</div>
                     <button class="win-btn" onclick="laadData()" style="margin-bottom: 12px;">Lijst Vernieuwen</button>
                     <div style="overflow-x: auto;">
                         <table>
@@ -458,7 +348,7 @@
                                     <th>ID</th>
                                     <th>Dag/Nacht</th>
                                     <th>Planning</th>
-                                    <th>Aansluit</th>
+                                    <th>Aansluitdatum</th>
                                     <th>Totaaltijd</th>
                                     <th>Pre Gew.</th>
                                     <th>Post Gew.</th>
@@ -471,6 +361,33 @@
                             </thead>
                             <tbody id="tabelBody">
                                 <tr><td colspan="12">Gegevens laden...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: GEREED -->
+            <div id="tab-gereed" class="tab-content">
+                <div class="win-groupbox">
+                    <div class="win-groupbox-title">✅ Voltooide Sessies (Automatisch verplaatst na 4 uur)</div>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Dag/Nacht</th>
+                                    <th>Aansluitdatum</th>
+                                    <th>Afsluitdatum</th>
+                                    <th>Pre Gew.</th>
+                                    <th>Post Gew.</th>
+                                    <th>Werkelijke UF</th>
+                                    <th>Verpleging</th>
+                                    <th>Acties</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gereedTabelBody">
+                                <tr><td colspan="9">Geen gereedstaande sessies.</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -491,8 +408,24 @@
 
         function zetAutomatischPlanID() {
             let now = new Date();
-            let autoId = "PLAN-" + now.toISOString().slice(0,10).replace(/-/g,'') + "-" + now.toTimeString().slice(0,5).replace(':','');
-            document.getElementById('planID').value = autoId;
+            let pad = n => n < 10 ? '0' + n : n;
+            let formatted = now.getFullYear() + pad(now.getMonth()+1) + pad(now.getDate()) + '-' + pad(now.getHours()) + pad(now.getMinutes());
+            document.getElementById('planID').value = "PLAN-" + formatted;
+        }
+
+        function updatePlanIdPrefix(val) {
+            if (val) {
+                let clean = val.replace(/[-T:]/g, '');
+                document.getElementById('planID').value = "DIAL-" + clean;
+            }
+        }
+
+        function genereerIdOpBasisVanAansluiting() {
+            let aansluitVal = document.getElementById('Aansluitdatumtijd').value;
+            if (aansluitVal) {
+                let clean = aansluitVal.replace(/[-T:]/g, '');
+                document.getElementById('ID').value = "DIAL-" + clean;
+            }
         }
 
         function schakelTab(tabNaam, btnEl) {
@@ -617,9 +550,10 @@
                     let dateStr = currDate.toISOString().slice(0, 10);
                     let timeStr = startVal.slice(11, 16);
                     let aansluitVal = `${dateStr}T${timeStr}`;
+                    let cleanTime = aansluitVal.replace(/[-T:]/g, '');
 
                     rowsToInsert.push({
-                        "ID": `${baseId}-${counter}`,
+                        "ID": `DIAL-${cleanTime}-${counter}`,
                         "Dag/Nacht": dagNacht,
                         "Planning": schema,
                         "Aansluitdatumtijd": aansluitVal,
@@ -643,7 +577,7 @@
             }).then(() => {
                 status.style.color = '#107c41';
                 status.textContent = `Succeselijk ${rowsToInsert.length} afspraken uitgeschreven naar het Overzicht!`;
-                zetAutomatischPlanID(); // Maak direct een nieuw basis ID aan voor de volgende planning
+                zetAutomatischPlanID();
                 setTimeout(() => {
                     status.textContent = '';
                     schakelTab('overzicht', document.querySelectorAll('.win-tab')[2]);
@@ -662,43 +596,74 @@
                         laadVerplegersCheckboxen(geselecteerd);
                     }
 
+                    // Sorteer actieve dialyse: Vandaag / dichtstbijzijnde datum bovenaan
+                    let data = response.dialyse || [];
+                    data.sort((a, b) => {
+                        let dateA = a['Aansluitdatumtijd'] ? new Date(a['Aansluitdatumtijd']) : new Date(0);
+                        let dateB = b['Aansluitdatumtijd'] ? new Date(b['Aansluitdatumtijd']) : new Date(0);
+                        return dateA - dateB; // Oplopend (vandaag/vroegste bovenaan)
+                    });
+
                     const tbody = document.getElementById('tabelBody');
                     tbody.innerHTML = '';
-                    let data = response.dialyse || [];
-
-                    if (!Array.isArray(data) || data.length === 0) {
+                    if (data.length === 0) {
                         tbody.innerHTML = '<tr><td colspan="12">Geen records gevonden.</td></tr>';
-                        return;
+                    } else {
+                        data.forEach(item => {
+                            let tr = document.createElement('tr');
+                            let ufVal = parseFloat(item['UF advies']) || 0;
+                            let ufKleurClass = '';
+                            if (ufVal >= 4.5) ufKleurClass = 'uf-rood';
+                            else if (ufVal >= 4.0) ufKleurClass = 'uf-oranje';
+                            else if (ufVal > 0) ufKleurClass = 'uf-groen';
+
+                            tr.innerHTML = `
+                                <td>${item['ID'] || ''}</td>
+                                <td>${item['Dag/Nacht'] || ''}</td>
+                                <td><b>${item['Planning'] || 'Geen'}</b></td>
+                                <td>${item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : ''}</td>
+                                <td>${item['Totaaltijd'] || ''}</td>
+                                <td>${item['Pre gewicht'] || ''}</td>
+                                <td>${item['Post gewicht'] || ''}</td>
+                                <td>${item['Droog gewicht'] || ''}</td>
+                                <td class="${ufKleurClass}">${item['UF advies'] || ''}</td>
+                                <td>${item['Werkelijke uf'] || ''}</td>
+                                <td>${item['Verpleging'] || ''}</td>
+                                <td>
+                                    <button class="win-btn win-btn-warning" style="padding:2px 6px; font-size:11px;" onclick='bewerkItem(${JSON.stringify(item)})'>Bewerken</button>
+                                    <button class="win-btn win-btn-danger" style="padding:2px 6px; font-size:11px;" onclick="verwijderItem(${item.rowIndex})">Wis</button>
+                                    <button class="win-btn win-btn-pdf" style="padding:2px 6px; font-size:11px;" onclick='genereerPDF(${JSON.stringify(item)})'>PDF</button>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
                     }
 
-                    data.slice().reverse().forEach(item => {
-                        let tr = document.createElement('tr');
-                        let ufVal = parseFloat(item['UF advies']) || 0;
-                        let ufKleurClass = '';
-                        if (ufVal >= 4.5) ufKleurClass = 'uf-rood';
-                        else if (ufVal >= 4.0) ufKleurClass = 'uf-oranje';
-                        else if (ufVal > 0) ufKleurClass = 'uf-groen';
-
-                        tr.innerHTML = `
-                            <td>${item['ID'] || ''}</td>
-                            <td>${item['Dag/Nacht'] || ''}</td>
-                            <td><b>${item['Planning'] || 'Geen'}</b></td>
-                            <td>${item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : ''}</td>
-                            <td>${item['Totaaltijd'] || ''}</td>
-                            <td>${item['Pre gewicht'] || ''}</td>
-                            <td>${item['Post gewicht'] || ''}</td>
-                            <td>${item['Droog gewicht'] || ''}</td>
-                            <td class="${ufKleurClass}">${item['UF advies'] || ''}</td>
-                            <td>${item['Werkelijke uf'] || ''}</td>
-                            <td>${item['Verpleging'] || ''}</td>
-                            <td>
-                                <button class="win-btn win-btn-warning" style="padding:2px 6px; font-size:11px;" onclick='bewerkItem(${JSON.stringify(item)})'>Bewerken</button>
-                                <button class="win-btn win-btn-danger" style="padding:2px 6px; font-size:11px;" onclick="verwijderItem(${item.rowIndex})">Wis</button>
-                                <button class="win-btn win-btn-pdf" style="padding:2px 6px; font-size:11px;" onclick='genereerPDF(${JSON.stringify(item)})'>PDF</button>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
+                    // Gereed tab vullen
+                    const gereedTbody = document.getElementById('gereedTabelBody');
+                    gereedTbody.innerHTML = '';
+                    let gereedData = response.gereed || [];
+                    if (gereedData.length === 0) {
+                        gereedTbody.innerHTML = '<tr><td colspan="9">Geen gereedstaande sessies.</td></tr>';
+                    } else {
+                        gereedData.forEach(gItem => {
+                            let gTr = document.createElement('tr');
+                            gTr.innerHTML = `
+                                <td>${gItem['ID'] || ''}</td>
+                                <td>${gItem['Dag/Nacht'] || ''}</td>
+                                <td>${gItem['Aansluitdatumtijd'] ? gItem['Aansluitdatumtijd'].replace('T', ' ') : ''}</td>
+                                <td>${gItem['Afsluitdatumtijd'] ? gItem['Afsluitdatumtijd'].replace('T', ' ') : ''}</td>
+                                <td>${gItem['Pre gewicht'] || ''}</td>
+                                <td>${gItem['Post gewicht'] || ''}</td>
+                                <td>${gItem['Werkelijke uf'] || ''}</td>
+                                <td>${gItem['Verpleging'] || ''}</td>
+                                <td>
+                                    <button class="win-btn win-btn-pdf" style="padding:2px 6px; font-size:11px;" onclick='genereerPDF(${JSON.stringify(gItem)})'>PDF</button>
+                                </td>
+                            `;
+                            gereedTbody.appendChild(gTr);
+                        });
+                    }
                 });
         }
 
@@ -711,7 +676,7 @@
             let idVal = document.getElementById('ID').value.trim();
             if (!idVal) {
                 let now = new Date();
-                idVal = "DIAL-" + now.toISOString().slice(0,10).replace(/-/g,'') + "-" + now.toTimeString().slice(0,5).replace(':','');
+                idVal = "DIAL-" + now.toISOString().slice(0,10).replace(/-/g,'');
             }
 
             let f2500Values = Array.from(document.querySelectorAll('input[name="f2500"]:checked')).map(cb => cb.value).join(', ');
@@ -827,6 +792,7 @@
             addRow("Type Behandeling:", item['Dag/Nacht']);
             addRow("Planning / Schema:", item['Planning']);
             addRow("Aansluit Datum/Tijd:", item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : '-');
+            addRow("Afsluit Datum/Tijd:", item['Afsluitdatumtijd'] ? item['Afsluitdatumtijd'].replace('T', ' ') : '-');
             addRow("Totale Tijd:", item['Totaaltijd']);
             y += 5; doc.setLineWidth(0.5); doc.line(15, y, 195, y); y += 10;
             addRow("Pre Gewicht:", (item['Pre gewicht'] || '-') + " kg");
