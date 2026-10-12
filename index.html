@@ -173,7 +173,7 @@
     <div class="win-window">
         <div class="win-titlebar">
             <span>🗂️ Dialyse Systeem (Windows Edition)</span>
-            <span>v2.0</span>
+            <span>v2.1</span>
         </div>
         <div class="win-content">
 
@@ -344,9 +344,8 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxII2ZYEskpjHVjN1Pr5FafsOszbKOovIOx2KOH0HahBbaD5b3-bQpr8fZhFSP85k-D/exec'; // Plak hier je Google Apps Script URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyZFvXqmAU3Dt7ttvk5HmYb8HZHz5JFLUV9tLbT5LLeV4VJcJYhBFAg1Tj3Um43qHOv/exec';
         
-        // Standaard lijst van verplegers (bewaard in browser geheugen)
         let verplegersLijst = JSON.parse(localStorage.getItem('dialyse_verplegers')) || ["Jan", "Sophie", "Mark", "Lisa"];
 
         window.onload = function() {
@@ -354,7 +353,6 @@
             laadData();
         };
 
-        // Verplegers checkboxen opbouwen
         function laadVerplegersCheckboxen(geselecteerd = []) {
             const container = document.getElementById('verplegingContainer');
             container.innerHTML = '';
@@ -368,7 +366,6 @@
             });
         }
 
-        // Live nieuwe verpleger toevoegen
         function voegVerplegerToe() {
             let input = document.getElementById('nieuweVerplegerNaam');
             let naam = input.value.trim();
@@ -376,16 +373,14 @@
                 verplegersLijst.push(naam);
                 localStorage.setItem('dialyse_verplegers', JSON.stringify(verplegersLijst));
                 
-                // Huidige selecties behouden
                 let geselecteerd = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value);
-                geselecteerd.push(naam); // Selecteer direct de nieuwe
+                geselecteerd.push(naam);
                 
                 laadVerplegersCheckboxen(geselecteerd);
                 input.value = '';
             }
         }
 
-        // Bereken totaal tijd automatisch (Afsluit - Aansluit)
         function berekenTotaalTijd() {
             let aansluit = document.getElementById('Aansluitdatumtijd').value;
             let afsluit = document.getElementById('Afsluitdatumtijd').value;
@@ -408,13 +403,11 @@
             }
         }
 
-        // Berekeningen voor gewichten en UF
         function berekenGegevens() {
             let pre = parseFloat(document.getElementById('Pre gewicht').value);
             let post = parseFloat(document.getElementById('Post gewicht').value);
             let droog = parseFloat(document.getElementById('Droog gewicht').value) || 109.0;
             
-            // UF Advies: Pre - Droog + 0.3
             if (!isNaN(pre)) {
                 let advies = (pre - droog + 0.3).toFixed(2);
                 let ufField = document.getElementById('UF advies');
@@ -430,7 +423,6 @@
                 document.getElementById('UF advies').className = '';
             }
 
-            // Werkelijke UF: Post gewicht - Pre gewicht (of positief getal van vochtverlies)
             if (!isNaN(pre) && !isNaN(post)) {
                 let werkUf = (post - pre).toFixed(2);
                 document.getElementById('Werkelijke uf').value = werkUf;
@@ -439,7 +431,6 @@
             }
         }
 
-        // Data ophalen uit de database
         function laadData() {
             fetch(scriptURL)
                 .then(res => res.json())
@@ -484,29 +475,24 @@
                 });
         }
 
-        // Formulier verzenden
         document.getElementById('dialyseForm').addEventListener('submit', e => {
             e.preventDefault();
             const status = document.getElementById('status');
             status.style.color = 'black';
             status.textContent = 'Bezig met opslaan...';
 
-            // Automatisch ID genereren als het leeg is op basis van datum/tijd
             let idVal = document.getElementById('ID').value.trim();
             if (!idVal) {
                 let now = new Date();
                 idVal = "DIAL-" + now.toISOString().slice(0,10).replace(/-/g,'') + "-" + now.toTimeString().slice(0,5).replace(':','');
             }
 
-            // Fragmin 2500 waarden verzamelen
             let f2500Values = Array.from(document.querySelectorAll('input[name="f2500"]:checked')).map(cb => cb.value).join(', ');
-            // Fragmin 5000 waarden verzamelen
             let f5000Values = Array.from(document.querySelectorAll('input[name="f5000"]:checked')).map(cb => cb.value).join(', ');
-            // Verpleging waarden verzamelen
             let verplegingValues = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value).join(', ');
 
             const payload = {
-                rowIndex: document.getElementById('rowIndex').value,
+                rowIndex: document.getElementById('rowIndex').value || '',
                 "ID": idVal,
                 "Dag/Nacht": document.getElementById('Dag/Nacht').value,
                 "Afspraakdatumtijd": document.getElementById('Afspraakdatumtijd').value,
@@ -533,16 +519,22 @@
             fetch(scriptURL, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(payload)
-            }).then(() => {
+            })
+            .then(() => {
                 status.style.color = 'green';
-                status.textContent = 'Gegevens succesvol opgeslagen!';
+                status.textContent = 'Gegevens succesvol opgeslagen in de Google Sheet!';
                 resetForm();
-                setTimeout(() => { status.textContent = ''; laadData(); }, 1500);
-            }).catch(err => {
+                setTimeout(() => { 
+                    status.textContent = ''; 
+                    laadData(); 
+                }, 1500);
+            })
+            .catch(err => {
+                console.error('Fout bij verzenden:', err);
                 status.style.color = 'red';
-                status.textContent = 'Fout bij opslaan.';
+                status.textContent = 'Fout bij opslaan: ' + err;
             });
         });
 
@@ -566,11 +558,9 @@
             document.getElementById('Notities dialyse').value = item['Notities dialyse'] || '';
             document.getElementById('Bijzonderheden patiënt').value = item['Bijzonderheden patiënt'] || '';
             
-            // Fragmin vinkjes herstellen
             document.querySelectorAll('input[name="f2500"]').forEach(cb => cb.checked = item['Fragmin 2500'] && item['Fragmin 2500'].includes(cb.value));
             document.querySelectorAll('input[name="f5000"]').forEach(cb => cb.checked = item['Fragmin 5000'] && item['Fragmin 5000'].includes(cb.value));
             
-            // Verpleging vinkjes herstellen
             let geselecteerdeVerplegers = item['Verpleging'] ? item['Verpleging'].split(', ') : [];
             laadVerplegersCheckboxen(geselecteerdeVerplegers);
 
@@ -585,7 +575,7 @@
                 fetch(scriptURL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ action: 'delete', rowIndex: rowIndex })
                 }).then(() => { laadData(); });
             }
