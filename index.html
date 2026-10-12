@@ -406,17 +406,32 @@
             zetAutomatischPlanID();
         };
 
+        // Tab wisselen werkt nu altijd direct los van internet of data
+        function schakelTab(tabNaam, btnEl) {
+            try {
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.win-tab').forEach(el => el.classList.remove('active'));
+                let targetTab = document.getElementById('tab-' + tabNaam);
+                if (targetTab) targetTab.classList.add('active');
+                if (btnEl) btnEl.classList.add('active');
+            } catch(e) {
+                console.error("Fout bij tab wisselen:", e);
+            }
+        }
+
         function zetAutomatischPlanID() {
             let now = new Date();
             let pad = n => n < 10 ? '0' + n : n;
             let formatted = now.getFullYear() + pad(now.getMonth()+1) + pad(now.getDate()) + '-' + pad(now.getHours()) + pad(now.getMinutes());
-            document.getElementById('planID').value = "PLAN-" + formatted;
+            let planEl = document.getElementById('planID');
+            if (planEl) planEl.value = "PLAN-" + formatted;
         }
 
         function updatePlanIdPrefix(val) {
             if (val) {
                 let clean = val.replace(/[-T:]/g, '');
-                document.getElementById('planID').value = "DIAL-" + clean;
+                let planEl = document.getElementById('planID');
+                if (planEl) planEl.value = "DIAL-" + clean;
             }
         }
 
@@ -424,19 +439,14 @@
             let aansluitVal = document.getElementById('Aansluitdatumtijd').value;
             if (aansluitVal) {
                 let clean = aansluitVal.replace(/[-T:]/g, '');
-                document.getElementById('ID').value = "DIAL-" + clean;
+                let idEl = document.getElementById('ID');
+                if (idEl) idEl.value = "DIAL-" + clean;
             }
-        }
-
-        function schakelTab(tabNaam, btnEl) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.win-tab').forEach(el => el.classList.remove('active'));
-            document.getElementById('tab-' + tabNaam).classList.add('active');
-            btnEl.classList.add('active');
         }
 
         function laadVerplegersCheckboxen(geselecteerd = []) {
             const container = document.getElementById('verplegingContainer');
+            if (!container) return;
             container.innerHTML = '';
             if (verplegersLijst.length === 0) {
                 container.innerHTML = 'Geen verplegers gevonden in Config.';
@@ -454,6 +464,7 @@
 
         function voegVerplegerToe() {
             let input = document.getElementById('nieuweVerplegerNaam');
+            if (!input) return;
             let naam = input.value.trim();
             if (naam && !verplegersLijst.includes(naam)) {
                 fetch(scriptURL, {
@@ -480,13 +491,15 @@
         function berekenTotaalTijd() {
             let aansluit = document.getElementById('Aansluitdatumtijd').value;
             let afsluit = document.getElementById('Afsluitdatumtijd').value;
+            let totaalEl = document.getElementById('Totaaltijd');
+            if (!totaalEl) return;
             if (aansluit && afsluit) {
                 let diffMs = new Date(afsluit) - new Date(aansluit);
                 if (diffMs > 0) {
                     let diffMins = Math.floor(diffMs / 60000);
-                    document.getElementById('Totaaltijd').value = `${Math.floor(diffMins / 60)}u ${diffMins % 60}m`;
-                } else { document.getElementById('Totaaltijd').value = 'Ongeldige tijd'; }
-            } else { document.getElementById('Totaaltijd').value = ''; }
+                    totaalEl.value = `${Math.floor(diffMins / 60)}u ${diffMins % 60}m`;
+                } else { totaalEl.value = 'Ongeldige tijd'; }
+            } else { totaalEl.value = ''; }
         }
 
         function berekenGegevens() {
@@ -494,23 +507,26 @@
             let post = parseFloat(document.getElementById('Post gewicht').value);
             let droog = parseFloat(document.getElementById('Droog gewicht').value) || 109.0;
             
-            if (!isNaN(pre)) {
+            let ufField = document.getElementById('UF advies');
+            if (!isNaN(pre) && ufField) {
                 let advies = (pre - droog + 0.3).toFixed(2);
-                let ufField = document.getElementById('UF advies');
                 ufField.value = advies;
                 ufField.className = '';
                 let val = parseFloat(advies);
                 if (val >= 4.5) ufField.classList.add('uf-rood');
                 else if (val >= 4.0) ufField.classList.add('uf-oranje');
                 else ufField.classList.add('uf-groen');
-            } else {
-                document.getElementById('UF advies').value = '';
-                document.getElementById('UF advies').className = '';
+            } else if (ufField) {
+                ufField.value = '';
+                ufField.className = '';
             }
 
-            if (!isNaN(pre) && !isNaN(post)) {
-                document.getElementById('Werkelijke uf').value = (post - pre).toFixed(2);
-            } else { document.getElementById('Werkelijke uf').value = ''; }
+            let werkelijkeUfField = document.getElementById('Werkelijke uf');
+            if (!isNaN(pre) && !isNaN(post) && werkelijkeUfField) {
+                werkelijkeUfField.value = (post - pre).toFixed(2);
+            } else if (werkelijkeUfField) { 
+                werkelijkeUfField.value = ''; 
+            }
         }
 
         function genereerPlanning(e) {
@@ -576,7 +592,7 @@
                 body: JSON.stringify({ action: 'bulk_insert', rows: rowsToInsert })
             }).then(() => {
                 status.style.color = '#107c41';
-                status.textContent = `Succeselijk ${rowsToInsert.length} afspraken uitgeschreven naar het Overzicht!`;
+                status.textContent = `Succesvol ${rowsToInsert.length} afspraken uitgeschreven naar het Overzicht!`;
                 zetAutomatischPlanID();
                 setTimeout(() => {
                     status.textContent = '';
@@ -590,6 +606,7 @@
             fetch(scriptURL)
                 .then(res => res.json())
                 .then(response => {
+                    if (!response) return;
                     if (response.verplegers) {
                         verplegersLijst = response.verplegers;
                         let geselecteerd = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value);
@@ -604,120 +621,134 @@
                     });
 
                     const tbody = document.getElementById('tabelBody');
-                    tbody.innerHTML = '';
-                    if (data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="12">Geen records gevonden.</td></tr>';
-                    } else {
-                        data.forEach(item => {
-                            let tr = document.createElement('tr');
-                            let ufVal = parseFloat(item['UF advies']) || 0;
-                            let ufKleurClass = '';
-                            if (ufVal >= 4.5) ufKleurClass = 'uf-rood';
-                            else if (ufVal >= 4.0) ufKleurClass = 'uf-oranje';
-                            else if (ufVal > 0) ufKleurClass = 'uf-groen';
+                    if (tbody) {
+                        tbody.innerHTML = '';
+                        if (data.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="12">Geen records gevonden.</td></tr>';
+                        } else {
+                            data.forEach(item => {
+                                let tr = document.createElement('tr');
+                                let ufVal = parseFloat(item['UF advies']) || 0;
+                                let ufKleurClass = '';
+                                if (ufVal >= 4.5) ufKleurClass = 'uf-rood';
+                                else if (ufVal >= 4.0) ufKleurClass = 'uf-oranje';
+                                else if (ufVal > 0) ufKleurClass = 'uf-groen';
 
-                            tr.innerHTML = `
-                                <td>${item['ID'] || ''}</td>
-                                <td>${item['Dag/Nacht'] || ''}</td>
-                                <td><b>${item['Planning'] || 'Geen'}</b></td>
-                                <td>${item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : ''}</td>
-                                <td>${item['Totaaltijd'] || ''}</td>
-                                <td>${item['Pre gewicht'] || ''}</td>
-                                <td>${item['Post gewicht'] || ''}</td>
-                                <td>${item['Droog gewicht'] || ''}</td>
-                                <td class="${ufKleurClass}">${item['UF advies'] || ''}</td>
-                                <td>${item['Werkelijke uf'] || ''}</td>
-                                <td>${item['Verpleging'] || ''}</td>
-                                <td>
-                                    <button class="win-btn win-btn-warning" style="padding:2px 6px; font-size:11px;" onclick='bewerkItem(${JSON.stringify(item)})'>Bewerken</button>
-                                    <button class="win-btn win-btn-danger" style="padding:2px 6px; font-size:11px;" onclick="verwijderItem(${item.rowIndex})">Wis</button>
-                                    <button class="win-btn win-btn-pdf" style="padding:2px 6px; font-size:11px;" onclick='genereerPDF(${JSON.stringify(item)})'>PDF</button>
-                                </td>
-                            `;
-                            tbody.appendChild(tr);
-                        });
+                                tr.innerHTML = `
+                                    <td>${item['ID'] || ''}</td>
+                                    <td>${item['Dag/Nacht'] || ''}</td>
+                                    <td><b>${item['Planning'] || 'Geen'}</b></td>
+                                    <td>${item['Aansluitdatumtijd'] ? item['Aansluitdatumtijd'].replace('T', ' ') : ''}</td>
+                                    <td>${item['Totaaltijd'] || ''}</td>
+                                    <td>${item['Pre gewicht'] || ''}</td>
+                                    <td>${item['Post gewicht'] || ''}</td>
+                                    <td>${item['Droog gewicht'] || ''}</td>
+                                    <td class="${ufKleurClass}">${item['UF advies'] || ''}</td>
+                                    <td>${item['Werkelijke uf'] || ''}</td>
+                                    <td>${item['Verpleging'] || ''}</td>
+                                    <td>
+                                        <button class="win-btn win-btn-warning" style="padding:2px 6px; font-size:11px;" onclick='bewerkItem(${JSON.stringify(item)})'>Bewerken</button>
+                                        <button class="win-btn win-btn-danger" style="padding:2px 6px; font-size:11px;" onclick="verwijderItem(${item.rowIndex})">Wis</button>
+                                        <button class="win-btn win-btn-pdf" style="padding:2px 6px; font-size:11px;" onclick='genereerPDF(${JSON.stringify(item)})'>PDF</button>
+                                    </td>
+                                `;
+                                tbody.appendChild(tr);
+                            });
+                        }
                     }
 
                     const gereedTbody = document.getElementById('gereedTabelBody');
-                    gereedTbody.innerHTML = '';
-                    let gereedData = response.gereed || [];
-                    if (gereedData.length === 0) {
-                        gereedTbody.innerHTML = '<tr><td colspan="9">Geen gereedstaande sessies.</td></tr>';
-                    } else {
-                        gereedData.forEach(gItem => {
-                            let gTr = document.createElement('tr');
-                            gTr.innerHTML = `
-                                <td>${gItem['ID'] || ''}</td>
-                                <td>${gItem['Dag/Nacht'] || ''}</td>
-                                <td>${gItem['Aansluitdatumtijd'] ? gItem['Aansluitdatumtijd'].replace('T', ' ') : ''}</td>
-                                <td>${gItem['Afsluitdatumtijd'] ? gItem['Afsluitdatumtijd'].replace('T', ' ') : ''}</td>
-                                <td>${gItem['Pre gewicht'] || ''}</td>
-                                <td>${gItem['Post gewicht'] || ''}</td>
-                                <td>${gItem['Werkelijke uf'] || ''}</td>
-                                <td>${gItem['Verpleging'] || ''}</td>
-                                <td>
-                                    <button class="win-btn win-btn-pdf" style="padding:2px 6px; font-size:11px;" onclick='genereerPDF(${JSON.stringify(gItem)})'>PDF</button>
-                                </td>
-                            `;
-                            gereedTbody.appendChild(gTr);
-                        });
+                    if (gereedTbody) {
+                        gereedTbody.innerHTML = '';
+                        let gereedData = response.gereed || [];
+                        if (gereedData.length === 0) {
+                            gereedTbody.innerHTML = '<tr><td colspan="9">Geen gereedstaande sessies.</td></tr>';
+                        } else {
+                            gereedData.forEach(gItem => {
+                                let gTr = document.createElement('tr');
+                                gTr.innerHTML = `
+                                    <td>${gItem['ID'] || ''}</td>
+                                    <td>${gItem['Dag/Nacht'] || ''}</td>
+                                    <td>${gItem['Aansluitdatumtijd'] ? gItem['Aansluitdatumtijd'].replace('T', ' ') : ''}</td>
+                                    <td>${gItem['Afsluitdatumtijd'] ? gItem['Afsluitdatumtijd'].replace('T', ' ') : ''}</td>
+                                    <td>${gItem['Pre gewicht'] || ''}</td>
+                                    <td>${gItem['Post gewicht'] || ''}</td>
+                                    <td>${gItem['Werkelijke uf'] || ''}</td>
+                                    <td>${gItem['Verpleging'] || ''}</td>
+                                    <td>
+                                        <button class="win-btn win-btn-pdf" style="padding:2px 6px; font-size:11px;" onclick='genereerPDF(${JSON.stringify(gItem)})'>PDF</button>
+                                    </td>
+                                `;
+                                gereedTbody.appendChild(gTr);
+                            });
+                        }
                     }
+                })
+                .catch(err => {
+                    console.error("Fout bij laden van data:", err);
                 });
         }
 
-        document.getElementById('dialyseForm').addEventListener('submit', e => {
-            e.preventDefault();
-            const status = document.getElementById('status');
-            status.style.color = 'black';
-            status.textContent = 'Bezig met opslaan...';
+        let formEl = document.getElementById('dialyseForm');
+        if (formEl) {
+            formEl.addEventListener('submit', e => {
+                e.preventDefault();
+                const status = document.getElementById('status');
+                if (status) {
+                    status.style.color = 'black';
+                    status.textContent = 'Bezig met opslaan...';
+                }
 
-            let idVal = document.getElementById('ID').value.trim();
-            if (!idVal) {
-                let now = new Date();
-                idVal = "DIAL-" + now.toISOString().slice(0,10).replace(/-/g,'');
-            }
+                let idVal = document.getElementById('ID').value.trim();
+                if (!idVal) {
+                    let now = new Date();
+                    idVal = "DIAL-" + now.toISOString().slice(0,10).replace(/-/g,'');
+                }
 
-            let f2500Values = Array.from(document.querySelectorAll('input[name="f2500"]:checked')).map(cb => cb.value).join(', ');
-            let f5000Values = Array.from(document.querySelectorAll('input[name="f5000"]:checked')).map(cb => cb.value).join(', ');
-            let verplegingValues = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value).join(', ');
+                let f2500Values = Array.from(document.querySelectorAll('input[name="f2500"]:checked')).map(cb => cb.value).join(', ');
+                let f5000Values = Array.from(document.querySelectorAll('input[name="f5000"]:checked')).map(cb => cb.value).join(', ');
+                let verplegingValues = Array.from(document.querySelectorAll('input[name="verplegingCheck"]:checked')).map(cb => cb.value).join(', ');
 
-            const payload = {
-                rowIndex: document.getElementById('rowIndex').value || '',
-                "ID": idVal,
-                "Dag/Nacht": document.getElementById('Dag/Nacht').value,
-                "Planning": document.getElementById('Planning').value,
-                "Afspraakdatumtijd": document.getElementById('Afspraakdatumtijd').value,
-                "Aansluitdatumtijd": document.getElementById('Aansluitdatumtijd').value,
-                "Afsluitdatumtijd": document.getElementById('Afsluitdatumtijd').value,
-                "Totaaltijd": document.getElementById('Totaaltijd').value,
-                "Pre gewicht": document.getElementById('Pre gewicht').value,
-                "Post gewicht": document.getElementById('Post gewicht').value,
-                "Droog gewicht": document.getElementById('Droog gewicht').value || '109.0',
-                "UF advies": document.getElementById('UF advies').value,
-                "UF ingesteld": document.getElementById('UF ingesteld').value,
-                "Werkelijke uf": document.getElementById('Werkelijke uf').value,
-                "Fragmin 2500": f2500Values,
-                "Fragmin 5000": f5000Values,
-                "Epo": document.getElementById('Epo').checked ? "Ja" : "Nee",
-                "Ijzer": document.getElementById('Ijzer').checked ? "Ja" : "Nee",
-                "Shuntflow": document.getElementById('Shuntflow').checked ? "Ja" : "Nee",
-                "Resultaat shuntflow": document.getElementById('Resultaat shuntflow').value,
-                "Verpleging": verplegingValues,
-                "Notities dialyse": document.getElementById('Notities dialyse').value,
-                "Bijzonderheden patiënt": document.getElementById('Bijzonderheden patiënt').value
-            };
+                const payload = {
+                    rowIndex: document.getElementById('rowIndex').value || '',
+                    "ID": idVal,
+                    "Dag/Nacht": document.getElementById('Dag/Nacht').value,
+                    "Planning": document.getElementById('Planning').value,
+                    "Afspraakdatumtijd": document.getElementById('Afspraakdatumtijd').value,
+                    "Aansluitdatumtijd": document.getElementById('Aansluitdatumtijd').value,
+                    "Afsluitdatumtijd": document.getElementById('Afsluitdatumtijd').value,
+                    "Totaaltijd": document.getElementById('Totaaltijd').value,
+                    "Pre gewicht": document.getElementById('Pre gewicht').value,
+                    "Post gewicht": document.getElementById('Post gewicht').value,
+                    "Droog gewicht": document.getElementById('Droog gewicht').value || '109.0',
+                    "UF advies": document.getElementById('UF advies').value,
+                    "UF ingesteld": document.getElementById('UF ingesteld').value,
+                    "Werkelijke uf": document.getElementById('Werkelijke uf').value,
+                    "Fragmin 2500": f2500Values,
+                    "Fragmin 5000": f5000Values,
+                    "Epo": document.getElementById('Epo').checked ? "Ja" : "Nee",
+                    "Ijzer": document.getElementById('Ijzer').checked ? "Ja" : "Nee",
+                    "Shuntflow": document.getElementById('Shuntflow').checked ? "Ja" : "Nee",
+                    "Resultaat shuntflow": document.getElementById('Resultaat shuntflow').value,
+                    "Verpleging": verplegingValues,
+                    "Notities dialyse": document.getElementById('Notities dialyse').value,
+                    "Bijzonderheden patiënt": document.getElementById('Bijzonderheden patiënt').value
+                };
 
-            fetch(scriptURL, {
-                method: 'POST', mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(payload)
-            }).then(() => {
-                status.style.color = '#107c41';
-                status.textContent = 'Gegevens succesvol opgeslagen!';
-                resetForm();
-                setTimeout(() => { status.textContent = ''; laadData(); }, 1500);
+                fetch(scriptURL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                }).then(() => {
+                    if (status) {
+                        status.style.color = '#107c41';
+                        status.textContent = 'Gegevens succesvol opgeslagen!';
+                    }
+                    resetForm();
+                    setTimeout(() => { if (status) status.textContent = ''; laadData(); }, 1500);
+                });
             });
-        });
+        }
 
         function bewerkItem(item) {
             document.getElementById('rowIndex').value = item.rowIndex;
@@ -748,8 +779,10 @@
             laadVerplegersCheckboxen(geselecteerdeVerplegers);
 
             berekenGegevens();
-            document.getElementById('formTitle').textContent = 'Dialyse Sessie Bewerken (Rij ' + item.rowIndex + ')';
-            document.getElementById('submitBtn').textContent = 'Bijwerken';
+            let formTitle = document.getElementById('formTitle');
+            if (formTitle) formTitle.textContent = 'Dialyse Sessie Bewerken (Rij ' + item.rowIndex + ')';
+            let submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) submitBtn.textContent = 'Bijwerken';
             
             schakelTab('invoer', document.querySelectorAll('.win-tab')[0]);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -805,7 +838,8 @@
         }
 
         function resetForm() {
-            document.getElementById('dialyseForm'].reset();
+            let form = document.getElementById('dialyseForm');
+            if (form) form.reset();
             document.getElementById('rowIndex').value = '';
             document.getElementById('Planning').value = 'Geen';
             document.getElementById('Droog gewicht').value = '109.0';
@@ -814,8 +848,10 @@
             document.getElementById('Werkelijke uf').value = '';
             document.getElementById('Totaaltijd').value = '';
             laadVerplegersCheckboxen(verplegersLijst.filter(n => false));
-            document.getElementById('formTitle').textContent = 'Nieuwe Dialyse Sessie Toevoegen';
-            document.getElementById('submitBtn').textContent = 'Gegevens Opslaan';
+            let formTitle = document.getElementById('formTitle');
+            if (formTitle) formTitle.textContent = 'Nieuwe Dialyse Sessie Toevoegen';
+            let submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) submitBtn.textContent = 'Gegevens Opslaan';
         }
     </script>
 </body>
