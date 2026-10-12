@@ -209,7 +209,7 @@
                                 <input type="number" step="0.1" id="Post gewicht" placeholder="Bijv. 109.0" oninput="berekenGegevens()">
                             </div>
                             <div class="form-group">
-                                <label>Droog gewicht (kg):</label>
+                                <label>Droog gewicht (kg) [Vrij aanpasbaar]:</label>
                                 <input type="number" step="0.1" id="Droog gewicht" value="109.0" oninput="berekenGegevens()">
                             </div>
                             <div class="form-group">
@@ -596,12 +596,11 @@
                         laadVerplegersCheckboxen(geselecteerd);
                     }
 
-                    // Sorteer actieve dialyse: Vandaag / dichtstbijzijnde datum bovenaan
                     let data = response.dialyse || [];
                     data.sort((a, b) => {
                         let dateA = a['Aansluitdatumtijd'] ? new Date(a['Aansluitdatumtijd']) : new Date(0);
                         let dateB = b['Aansluitdatumtijd'] ? new Date(b['Aansluitdatumtijd']) : new Date(0);
-                        return dateA - dateB; // Oplopend (vandaag/vroegste bovenaan)
+                        return dateA - dateB;
                     });
 
                     const tbody = document.getElementById('tabelBody');
@@ -639,7 +638,6 @@
                         });
                     }
 
-                    // Gereed tab vullen
                     const gereedTbody = document.getElementById('gereedTabelBody');
                     gereedTbody.innerHTML = '';
                     let gereedData = response.gereed || [];
@@ -694,7 +692,7 @@
                 "Totaaltijd": document.getElementById('Totaaltijd').value,
                 "Pre gewicht": document.getElementById('Pre gewicht').value,
                 "Post gewicht": document.getElementById('Post gewicht').value,
-                "Droog gewicht": document.getElementById('Droog gewicht').value,
+                "Droog gewicht": document.getElementById('Droog gewicht').value || '109.0',
                 "UF advies": document.getElementById('UF advies').value,
                 "UF ingesteld": document.getElementById('UF ingesteld').value,
                 "Werkelijke uf": document.getElementById('Werkelijke uf').value,
@@ -732,7 +730,7 @@
             document.getElementById('Totaaltijd').value = item['Totaaltijd'] || '';
             document.getElementById('Pre gewicht').value = item['Pre gewicht'] || '';
             document.getElementById('Post gewicht').value = item['Post gewicht'] || '';
-            document.getElementById('Droog gewicht').value = item['Droog gewicht'] || '109.0';
+            document.getElementById('Droog gewicht').value = item['Droog gewicht'] !== undefined && item['Droog gewicht'] !== '' ? item['Droog gewicht'] : '109.0';
             document.getElementById('UF ingesteld').value = item['UF ingesteld'] || '';
             document.getElementById('Werkelijke uf').value = item['Werkelijke uf'] || '';
             
@@ -807,7 +805,7 @@
         }
 
         function resetForm() {
-            document.getElementById('dialyseForm').reset();
+            document.getElementById('dialyseForm'].reset();
             document.getElementById('rowIndex').value = '';
             document.getElementById('Planning').value = 'Geen';
             document.getElementById('Droog gewicht').value = '109.0';
