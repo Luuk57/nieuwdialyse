@@ -26,6 +26,7 @@
             padding: 20px;
             display: flex;
             justify-content: center;
+            transition: all 0.3s ease;
         }
 
         .win-window {
@@ -38,12 +39,33 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        /* Klasse voor maximaliseren via het vierkantje */
+        body.maximized {
+            padding: 0;
+        }
+        body.maximized .win-window {
+            max-width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            border: none;
+        }
+        body.maximized .win-content {
+            max-height: calc(100vh - 90px);
+        }
+
+        /* Klasse voor minimaliseren via het streepje */
+        .win-window.minimized .win-tabs,
+        .win-window.minimized .win-content {
+            display: none;
         }
 
         .win-titlebar {
             background: #ffffff;
             border-bottom: 1px solid var(--win-border-light);
-            padding: 10px 16px;
+            padding: 8px 16px;
             font-size: 13px;
             font-weight: 500;
             display: flex;
@@ -53,11 +75,11 @@
         }
 
         .win-titlebar-left { display: flex; align-items: center; gap: 8px; }
-        .win-titlebar-buttons { display: flex; gap: 4px; }
+        .win-titlebar-buttons { display: flex; gap: 2px; }
 
         .win-control-btn {
-            width: 32px; height: 28px; border: none; background: transparent; border-radius: 4px;
-            cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; color: var(--win-text);
+            width: 38px; height: 30px; border: none; background: transparent; border-radius: 4px;
+            cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; color: var(--win-text);
         }
         .win-control-btn:hover { background: rgba(0, 0, 0, 0.06); }
         .win-control-btn.close:hover { background: #e81123; color: white; }
@@ -134,16 +156,16 @@
 </head>
 <body>
 
-    <div class="win-window">
+    <div class="win-window" id="mainWindow">
         <div class="win-titlebar">
             <div class="win-titlebar-left">
                 <span>🏥</span>
-                <span>Dialyse Beheersysteem - Planning & Overzicht</span>
+                <span>Dialyse Beheersysteem - Windows 11</span>
             </div>
             <div class="win-titlebar-buttons">
-                <button class="win-control-btn" title="Minimaliseren">🗕</button>
-                <button class="win-control-btn" title="Optimaliseren">🗖</button>
-                <button class="win-control-btn close" title="Sluiten">✕</button>
+                <button class="win-control-btn" title="Minimaliseren" onclick="minimaliseerVenster()">🗕</button>
+                <button class="win-control-btn" id="maximizeBtn" title="Optimaliseren / Maximaliseren" onclick="maximaliseerVenster()">🗖</button>
+                <button class="win-control-btn close" title="Sluiten" onclick="sluitVenster()">✕</button>
             </div>
         </div>
 
@@ -406,6 +428,35 @@
             zetAutomatischPlanID();
             laadStandaardDroogGewicht();
         };
+
+        // Venster acties voor de Windows 11 knoppen
+        function minimaliseerVenster() {
+            let win = document.getElementById('mainWindow');
+            win.classList.toggle('minimized');
+        }
+
+        function maximaliseerVenster() {
+            let body = document.body;
+            let btn = document.getElementById('maximizeBtn');
+            body.classList.toggle('maximized');
+            if (body.classList.contains('maximized')) {
+                btn.textContent = '❐';
+                btn.title = 'Herstellen';
+            } else {
+                btn.textContent = '🗖';
+                btn.title = 'Optimaliseren / Maximaliseren';
+            }
+        }
+
+        function sluitVenster() {
+            if (confirm('Wil je dit dialyse-systeem sluiten of verbergen?')) {
+                window.close();
+                // Als debrowser window.close() blokkeert, tonen we een melding
+                setTimeout(() => {
+                    alert('Systeem is vergrendeld. Vernieuw de pagina om opnieuw te starten.');
+                }, 100);
+            }
+        }
 
         function laadStandaardDroogGewicht() {
             let opgeslagenGewicht = localStorage.getItem('standaard_droog_gewicht') || '109.0';
@@ -855,7 +906,6 @@
             document.getElementById('rowIndex').value = '';
             document.getElementById('Planning').value = 'Geen';
             
-            // Laad direct het nieuw ingestelde standaard droge gewicht bij reset
             laadStandaardDroogGewicht();
 
             document.getElementById('UF advies').value = '';
